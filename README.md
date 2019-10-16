@@ -134,3 +134,7 @@ Ziye Wang: zwang17@fudan.edu.cn and Dr. Shanfeng Zhu: zhusf@fudan.edu.cn
 
 [3] Wang Z., Wang Z., et al.(2019) "SolidBin: Improving Metagenome Binning with Semi-supervised Normalized Cut." Bioinformatics. 2019 Apr 12. pii: btz253. 
 
+[4] Christian M. K. Sieber, Alexander J. Probst., et al. (2018). "Recovery of genomes from metagenomes via a dereplication, aggregation and scoring strategy". Nature Microbiology. https://doi.org/10.1038/s41564-018-0171-1.
+
+[5] Kelley,D.,andSalzberg,S.(2010). "Clustering metagenomic sequences with interpolated markov models". BMC Bioinformatics 11:544. doi:10.1186/1471-2105-11-544
+

@@ -50,7 +50,16 @@ You input directory should look like this:
 |   +-- pacbio_sample_3
 ```
 
-For conda environment , you should check whether perl is installed.
+For conda environment, you should check whether perl is installed.
 
 ### Input files
-You need to run scripts/run.sh input_path/contigs.fasta contigs_length_threshold kmer_length to obtain the composition profiles and the coverage profiles (only short read samples; only long read samples)
+You need to run like this to obtain the composition profiles and the coverage profiles (only short read samples; only long read samples)
+```sh
+scripts/run.sh input_path/contigs.fasta contigs_length_threshold kmer_length
+```
+
+"contigs_length_threshold" means only the contigs longer than the value are kept for binning. For example,
+```sh
+./run.sh input_path/contigs.fasta 1000 4
+```
+Note:The coverage_new.tsv file should be put into the "input_path" and if the sample numbers of the long read samples and the short read samples are not different, you may need to change the "split_coverage.py"

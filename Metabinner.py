@@ -2,9 +2,7 @@
 # @Author  : ZWang
 # @FileName: Metabinner.py
 # scikit-learn == 0.20.4
-# 暂时在py2的环境下测试
-# 加入跑kmeans长度加权和seed center初始化功�?
-# 考虑加入后处�?
+
 import argparse
 import csv
 import logging
@@ -577,10 +575,6 @@ def partial_seed_init(X, n_clusters, random_state, seed_idx, n_local_trials=None
     # print(seed_idx)
     return centers
 
-    # 可以换一套seed,这个之后再说
-    # 文件列表，遍于读�?
-    # 把多个文件混�?
-
 
 def recluster_other_contigs(not_clustered_path, X_t, namelist, mapObj, length_weight):
     files = os.listdir(not_clustered_path)
@@ -964,16 +958,6 @@ if __name__ == '__main__':
     # global seed_idx
     seed_idx = [name_map[seed_name] for seed_name in seed_list]
 
-    # run original kmeans
-    logger.info("run original kmeans")
-    km = KMeans(n_clusters=bestK, init='k-means++', n_jobs=-1, n_init=30, random_state=7)
-    km.fit(X_t)
-    idx = km.labels_
-    kmeans_ori_output = os.path.dirname(args.output) + '/kmeans_ori_result.tsv'
-    save_result(idx, kmeans_ori_output, namelist)
-    kmeans_ori_output_dir = os.path.dirname(args.output) + '/kmeans_ori_result'
-    os.mkdir(kmeans_ori_output_dir)
-    gen_bins(contig_file, kmeans_ori_output, kmeans_ori_output_dir, "kmeans_ori_result")
 
     # run weight kmeans
     logger.info("run kmeans with length weight")
@@ -1077,22 +1061,6 @@ if __name__ == '__main__':
         gen_bins(contig_file, kmeans_pb_partial_seed_length_weight_output,
                  kmeans_pb_partial_seed_length_weight_output_dir, "pb_partial_seed_length_weight_result")
 
-    """
-    # run weight kmeans with hmm profile
-    if args.use_hmm:
-        logger.info("Run weight kmeans with hmm information only.")
-        nClass = sum((np.sum(X_hmm, axis=0) >= 100).astype(int)) #100 can be reset.
-        km = KMeans(n_clusters=nClass, init='k-means++', n_jobs=-1,n_init=30,random_state=7)
-        km.fit(X_hmm, sample_weight=length_weight)
-        idx = km.labels_
-        kmeans_length_weight_hmm_output = os.path.dirname(
-            args.output) + '/kmeans_length_weight_hmm_result.tsv'
-        save_result(idx, kmeans_length_weight_hmm_output, namelist)
-        kmeans_length_weight_hmm_output_dir = os.path.dirname(
-            args.output) + '/kmeans_length_weight_hmm_result'
-        os.mkdir(kmeans_length_weight_hmm_output_dir)
-        gen_bins(contig_file, kmeans_length_weight_hmm_output, kmeans_length_weight_hmm_output_dir,"hmm_result")
-    """
     # run weight kmeans with kmer_cov_hmm profile
     if args.use_hmm:
         logger.info("Run weight kmeans with kmer_cov_hmm information.")
@@ -1169,9 +1137,6 @@ if __name__ == '__main__':
     checkm_analysis(checkm_file, suffix_str, checkm_out_dir)
     #
     goodbin_path = kmeans_partial_seed_initial_output_dir + '/good_bins'
-    score_l1_goodbin = calculate_eps_for_l1(goodbin_path, mapObj, X_t, length_weight, namelist)
-    l1_distance_score = np.mean(score_l1_goodbin)
-    logger.info("eps_for_dbscan:\t" + str(l1_distance_score))
 
     # 处理high_com_p_high_cont文件
     logger.info("Recluster the contigs from high_com_p_high_cont bins")
@@ -1194,37 +1159,7 @@ if __name__ == '__main__':
     gen_bins(args.contig_file, kmeans_seed_partial_with_postprocess_output,
              kmeans_seed_partial_with_postprocess_output_dir, "seed_partial_with_postprocess")
 
-    # run weight kmeans with composition information only
-    logger.info("Run weight kmeans partial seedwith composition information only.")
-    km = KMeans(n_clusters=bestK, n_jobs=-1, n_init=30, random_state=7,
-                init=functools.partial(partial_seed_init, seed_idx=seed_idx))
-    km.fit(X_com, sample_weight=length_weight)
-    idx = km.labels_
-    kmeans_length_weight_com_only_partial_seed_output = os.path.dirname(
-        args.output) + '/kmeans_length_weight_com_only_result_partial_seed.tsv'
-    save_result(idx, kmeans_length_weight_com_only_partial_seed_output, namelist)
-    kmeans_length_weight_com_only_partial_seed_output_dir = os.path.dirname(
-        args.output) + '/kmeans_length_weight_com_only_result_partial_seed'
-    os.mkdir(kmeans_length_weight_com_only_partial_seed_output_dir)
-    gen_bins(contig_file, kmeans_length_weight_com_only_partial_seed_output,
-             kmeans_length_weight_com_only_partial_seed_output_dir, "com_result_partial_seed")
 
-    # run weight kmeans with coverage information only
-    if (len(X_cov[0]) >= 5):
-        logger.info("Run weight kmeans partial seed with coverage information only.")
-        km = KMeans(n_clusters=bestK, n_jobs=-1, n_init=30, random_state=7,
-                    init=functools.partial(partial_seed_init, seed_idx=seed_idx))
-        X_cov = np.log10(X_cov * int(100) + 1)  # 参考bisanity初始�?
-        km.fit(X_cov, sample_weight=length_weight)
-        idx = km.labels_
-        kmeans_length_weight_cov_only_partial_seed_output = os.path.dirname(
-            args.output) + '/kmeans_length_weight_cov_only_result_partial_seed.tsv'
-        save_result(idx, kmeans_length_weight_cov_only_partial_seed_output, namelist)
-        kmeans_length_weight_cov_only_partial_seed_output_dir = os.path.dirname(
-            args.output) + '/kmeans_length_weight_cov_only_result_partial_seed'
-        os.mkdir(kmeans_length_weight_cov_only_partial_seed_output_dir)
-        gen_bins(contig_file, kmeans_length_weight_cov_only_partial_seed_output,
-                 kmeans_length_weight_cov_only_partial_seed_output_dir, "cov_result_partial_seed")
 
     # run weight kmeans with kmer_cov_hmm profile _partial_seed
     if args.use_hmm:
@@ -1400,51 +1335,8 @@ if __name__ == '__main__':
     idx = km.labels_
     save_result_refine(idx, remained_contig_file + ".reclustered.tsv",
                        namelist, remained_contig_id_number)
-    icluster = {}
-    for i in range(len(idx)):
-        if idx[i] not in icluster:
-            icluster[idx[i]] = []
-        icluster[idx[i]].append(i)
 
 
-    def dbscan_filter_l1(i, eps_value=0.5):
-        weight = [remained_contigs_weight[id] for id in icluster[i]]
-        sub_pred = DBSCAN(min_samples=200000, n_jobs=1, metric='l1', eps=eps_value).fit_predict(
-            X_t_remained[icluster[i]], sample_weight=weight)
-        x_no_list = icluster[i]
-        x_y = list(zip(x_no_list, sub_pred))
-        return x_y
-
-
-    """
-    print("start dbscan filtering")
-    dbscan_filter_l1_eps = partial(dbscan_filter_l1, eps_value=l1_distance_score)
-    #sub_cluster = pool.map(dbscan_filter_l1_eps, icluster.keys())
-    with ProcessPoolExecutor() as pool:
-        sub_cluster = pool.map(dbscan_filter_l1_eps, icluster.keys(), chunksize=5)
-
-    final_cluster = {}
-    unbinned = []
-
-    for big_cluster in sub_cluster:
-        offset = len(final_cluster)
-        for x, y in big_cluster:
-            if y != -1:
-                bin_num = y + offset
-                if bin_num not in final_cluster:
-                    final_cluster[bin_num] = []
-                final_cluster[bin_num].append(x)
-            else:
-                unbinned.append(x)
-
-    with open(
-            os.path.dirname(das_tool_output)+'/remained_contigs_kmeans_dbscan_filter200k_l1_eps.tsv',
-            "w") as outfile:
-        for bin_num in final_cluster:
-            for i in final_cluster[bin_num]:
-                outfile.write(namelist[remained_contig_id_number[i]] + '\t' + str(bin_num) + '\n')
-
-    """
     output_dir = os.path.dirname(remained_contig_file) + '/remained_contig_file_result'
     os.mkdir(output_dir)
     gen_bins(contig_file, remained_contig_file + ".reclustered.tsv", output_dir, "remained_contig_file_result_result")
@@ -1462,7 +1354,7 @@ if __name__ == '__main__':
     suffix_str = '.bin'
     checkm_analysis(checkm_file, suffix_str, checkm_out_dir)
 
-    # 处理high_com_p_high_cont文件
+    # deal with high_com_p_high_cont files
     logger.info("Recluster the contigs from high_com_p_high_cont bins")
     high_com_p_high_cont_path = output_dir + "/High_completion_high_contamination"
     recluster_hh_bins(high_com_p_high_cont_path, mapObj, X_t, length_weight, namelist)

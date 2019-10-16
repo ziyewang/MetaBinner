@@ -1,4 +1,4 @@
-# MetaBinner：imporving large scale binning performance with K-means results of multiple features.
+# MetaBinner: imporving large scale binning performance with ensemble K-means by considering multiple types of features.
 
 ## <a name="started"></a>Getting Started
 
@@ -117,7 +117,16 @@ Note:The coverage_new.tsv file should be put into the "input_path" and if the sa
     --hmm_icm_path HMM_ICM_PATH:
              Metabinner/hmm_data/hmm/
 
-    
-    
-              
+## <a name="preprocessing"></a>Contacts and bug reports
+Please send bug reports or questions (such as the appropriate modes for your datasets) to
+Ziye Wang: zwang17@fudan.edu.cn and Dr. Shanfeng Zhu: zhusf@fudan.edu.cn
+
+## <a name="preprocessing"></a>References
+         
+
+[1] Parks DH, Imelfort M, Skennerton CT, Hugenholtz P, Tyson GW. 2015. "CheckM: assessing the quality of microbial genomes recovered from isolates, single cells, and metagenomes." Genome Research, 25: 1043–1055.
+
+[2] Graham ED, Heidelberg JF, Tully BJ. (2017) "BinSanity: unsupervised clustering of environmental microbial assemblies using coverage and affinity propagation." PeerJ 5:e3035
+
+[3] Wang Z., Wang Z., et al.(2019) "SolidBin: Improving Metagenome Binning with Semi-supervised Normalized Cut." Bioinformatics. 2019 Apr 12. pii: btz253. 
 

@@ -117,6 +117,10 @@ Note:The coverage_new.tsv file should be put into the "input_path" and if the sa
     --hmm_icm_path HMM_ICM_PATH:
              Metabinner/hmm_data/hmm/
 
+```sh
+OPENBLAS_NUM_THREADS=1 python Metabinner.py --contig_file input_path/contigs.fasta --coverage_profiles input_path/coverage_sr_new.tsv --composition_profiles input_path/kmer_4_f0.csv --output output_path/result.tsv --log output_path/result.log --pacbio_read_profiles input_path/coverage_pb_new.tsv --use_hmm --hmm_icm_path path_to_MetaBinner/hmm_data/hmm/
+```
+
 ## <a name="preprocessing"></a>Contacts and bug reports
 Please send bug reports or questions (such as the appropriate modes for your datasets) to
 Ziye Wang: zwang17@fudan.edu.cn and Dr. Shanfeng Zhu: zhusf@fudan.edu.cn

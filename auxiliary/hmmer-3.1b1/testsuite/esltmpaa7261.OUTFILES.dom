@@ -1,0 +1,14 @@
+#                                                                            --- full sequence --- -------------- this domain -------------   hmm coord   ali coord   env coord
+# target name        accession   tlen query name           accession   qlen   E-value  score  bias   #  of  c-Evalue  i-Evalue  score  bias  from    to  from    to  from    to  acc description of target
+#------------------- ---------- ----- -------------------- ---------- ----- --------- ------ ----- --- --- --------- --------- ------ ----- ----- ----- ----- ----- ----- ----- ---- ---------------------
+test2                -             21 test                 -             20   2.3e-22   64.6   0.1   1   1   2.6e-22   2.6e-22   64.5   0.1     1    20     1    21     1    21 0.99 -
+#
+# Program:         hmmsearch
+# Version:         3.1b1 (May 2013)
+# Pipeline mode:   SEARCH
+# Query file:      ./../testsuite/20aa.hmm
+# Target file:     esltmpaa7261.OUTFILES.2
+# Option settings: ../src/hmmsearch --domtblout esltmpaa7261.OUTFILES.dom ./../testsuite/20aa.hmm esltmpaa7261.OUTFILES.2 
+# Current dir:     /panfs/cmb-panasas2/ylu465/MaxBin-2.1.1/auxiliary/hmmer-3.1b1/testsuite
+# Date:            Sun Mar  6 19:52:04 2016
+# [ok]

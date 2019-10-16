@@ -1,0 +1,25 @@
+# Per-column basepair counts:
+# Alignment file: esltmpaa59177.TESTPFX.dbl.stk
+# Alignment idx:  1
+# Number of sequences: 3
+# Only basepairs involving two canonical (non-degenerate) residues were counted.
+# Sequence weights from alignment were ignored (if they existed).
+#
+#    lpos     rpos    AA      AC      AG      AU      CA      CC      CG      CU      GA      GC      GG      GU      UA      UC      UG      UU  
+# -------  -------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------
+       16       34       0       0       0       0       0       0       2       0       0       0       0       0       0       0       0       0
+       20       33       0       0       0       0       0       0       3       0       0       0       0       0       0       0       0       0
+       21       32       0       0       0       0       0       0       3       0       0       0       0       0       0       0       0       0
+       22       31       0       0       0       0       0       0       3       0       0       0       0       0       0       0       0       0
+       23       30       0       0       0       0       0       0       3       0       0       0       0       0       0       0       0       0
+//
+# Per-column basepair counts:
+# Alignment file: esltmpaa59177.TESTPFX.dbl.stk
+# Alignment idx:  2
+# Number of sequences: 2
+# Only basepairs involving two canonical (non-degenerate) residues were counted.
+# Sequence weights from alignment were ignored (if they existed).
+#
+#    lpos     rpos    AA      AC      AG      AU      CA      CC      CG      CU      GA      GC      GG      GU      UA      UC      UG      UU  
+# -------  -------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------  ------
+//

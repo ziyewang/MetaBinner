@@ -982,53 +982,52 @@ if __name__ == '__main__':
     gen_bins(contig_file, kmeans_length_weight_com_only_output, kmeans_length_weight_com_only_output_dir, "com_result")
 
     # run weight kmeans with coverage information only
-    if (len(X_cov[0]) >= 5):
-        logger.info("Run weight kmeans with coverage information only.")
-        km = KMeans(n_clusters=bestK, init='k-means++', n_jobs=-1, n_init=30, random_state=7)
-        X_cov = np.log10(X_cov * int(100) + 1)  # 参考bisanity初始�?
-        km.fit(X_cov, sample_weight=length_weight)
-        idx = km.labels_
-        kmeans_length_weight_cov_only_output = os.path.dirname(
-            args.output) + '/kmeans_length_weight_cov_only_result.tsv'
-        save_result(idx, kmeans_length_weight_cov_only_output, namelist)
-        kmeans_length_weight_cov_only_output_dir = os.path.dirname(
-            args.output) + '/kmeans_length_weight_cov_only_result'
-        os.mkdir(kmeans_length_weight_cov_only_output_dir)
-        gen_bins(contig_file, kmeans_length_weight_cov_only_output, kmeans_length_weight_cov_only_output_dir,
-                 "cov_result")
+    logger.info("Run weight kmeans with coverage information only.")
+    km = KMeans(n_clusters=bestK, init='k-means++', n_jobs=-1, n_init=30, random_state=7)
+    X_cov = np.log10(X_cov * int(100) + 1)  # 参考bisanity初始�?
+    km.fit(X_cov, sample_weight=length_weight)
+    idx = km.labels_
+    kmeans_length_weight_cov_only_output = os.path.dirname(
+        args.output) + '/kmeans_length_weight_cov_only_result.tsv'
+    save_result(idx, kmeans_length_weight_cov_only_output, namelist)
+    kmeans_length_weight_cov_only_output_dir = os.path.dirname(
+        args.output) + '/kmeans_length_weight_cov_only_result'
+    os.mkdir(kmeans_length_weight_cov_only_output_dir)
+    gen_bins(contig_file, kmeans_length_weight_cov_only_output, kmeans_length_weight_cov_only_output_dir,
+             "cov_result")
+
 
     if args.pacbio_read_profiles:
-        if (len(X_cov_pb[0]) >= 5):
-            logger.info("Run weight kmeans partial seed with coverage pb information only.")
-            km = KMeans(n_clusters=bestK, n_jobs=-1, n_init=30, random_state=7,
-                            init=functools.partial(partial_seed_init, seed_idx=seed_idx))
-            X_cov_pb_trans = np.log10(X_cov_pb * int(100) + 1)  # 参考bisanity初始�?
-            km.fit(X_cov_pb, sample_weight=length_weight)
-            idx = km.labels_
-            kmeans_length_weight_cov_pb_only_partial_seed_output = os.path.dirname(
-                args.output) + '/kmeans_length_weight_cov_pb_only_result_partial_seed.tsv'
-            save_result(idx, kmeans_length_weight_cov_pb_only_partial_seed_output, namelist)
-            kmeans_length_weight_cov_pb_only_partial_seed_output_dir = os.path.dirname(
-                args.output) + '/kmeans_length_weight_cov_pb_only_result_partial_seed'
-            os.mkdir(kmeans_length_weight_cov_pb_only_partial_seed_output_dir)
-            gen_bins(contig_file, kmeans_length_weight_cov_pb_only_partial_seed_output,
-                     kmeans_length_weight_cov_pb_only_partial_seed_output_dir, "cov_pb_result_partial_seed")
-
-    if (len(X_cov_sr[0]) >= 5):
-        logger.info("Run weight kmeans partial seed with coverage short read information only.")
+        logger.info("Run weight kmeans partial seed with coverage pb information only.")
         km = KMeans(n_clusters=bestK, n_jobs=-1, n_init=30, random_state=7,
                     init=functools.partial(partial_seed_init, seed_idx=seed_idx))
-        X_cov_sr_trans = np.log10(X_cov_sr * int(100) + 1)  # 参考bisanity初始�?
-        km.fit(X_cov_sr_trans, sample_weight=length_weight)
+        X_cov_pb_trans = np.log10(X_cov_pb * int(100) + 1)  # 参考bisanity初始�?
+        km.fit(X_cov_pb, sample_weight=length_weight)
         idx = km.labels_
-        kmeans_length_weight_cov_sr_only_partial_seed_output = os.path.dirname(
-            args.output) + '/kmeans_length_weight_cov_sr_only_result_partial_seed.tsv'
-        save_result(idx, kmeans_length_weight_cov_sr_only_partial_seed_output, namelist)
-        kmeans_length_weight_cov_sr_only_partial_seed_output_dir = os.path.dirname(
-            args.output) + '/kmeans_length_weight_cov_sr_only_result_partial_seed'
-        os.mkdir(kmeans_length_weight_cov_sr_only_partial_seed_output_dir)
-        gen_bins(contig_file, kmeans_length_weight_cov_sr_only_partial_seed_output,
-                 kmeans_length_weight_cov_sr_only_partial_seed_output_dir, "cov_sr_result_partial_seed")
+        kmeans_length_weight_cov_pb_only_partial_seed_output = os.path.dirname(
+            args.output) + '/kmeans_length_weight_cov_pb_only_result_partial_seed.tsv'
+        save_result(idx, kmeans_length_weight_cov_pb_only_partial_seed_output, namelist)
+        kmeans_length_weight_cov_pb_only_partial_seed_output_dir = os.path.dirname(
+            args.output) + '/kmeans_length_weight_cov_pb_only_result_partial_seed'
+        os.mkdir(kmeans_length_weight_cov_pb_only_partial_seed_output_dir)
+        gen_bins(contig_file, kmeans_length_weight_cov_pb_only_partial_seed_output,
+                 kmeans_length_weight_cov_pb_only_partial_seed_output_dir, "cov_pb_result_partial_seed")
+
+
+    logger.info("Run weight kmeans partial seed with coverage short read information only.")
+    km = KMeans(n_clusters=bestK, n_jobs=-1, n_init=30, random_state=7,
+                init=functools.partial(partial_seed_init, seed_idx=seed_idx))
+    X_cov_sr_trans = np.log10(X_cov_sr * int(100) + 1)  # 参考bisanity初始�?
+    km.fit(X_cov_sr_trans, sample_weight=length_weight)
+    idx = km.labels_
+    kmeans_length_weight_cov_sr_only_partial_seed_output = os.path.dirname(
+        args.output) + '/kmeans_length_weight_cov_sr_only_result_partial_seed.tsv'
+    save_result(idx, kmeans_length_weight_cov_sr_only_partial_seed_output, namelist)
+    kmeans_length_weight_cov_sr_only_partial_seed_output_dir = os.path.dirname(
+        args.output) + '/kmeans_length_weight_cov_sr_only_result_partial_seed'
+    os.mkdir(kmeans_length_weight_cov_sr_only_partial_seed_output_dir)
+    gen_bins(contig_file, kmeans_length_weight_cov_sr_only_partial_seed_output,
+             kmeans_length_weight_cov_sr_only_partial_seed_output_dir, "cov_sr_result_partial_seed")
 
     # run kmeans with partial seed initial with length weight
     logger.info("Run kmeans sr with partial seed initial with length weight.")

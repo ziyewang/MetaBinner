@@ -14,14 +14,14 @@ git clone https://github.com/ziyewang/MetaBinner
 Then simply create a metabinner environment 
 
 ```sh
-conda env create -f environment.yml
+conda env create -f metabinner_env.yaml
 conda activate metabinner_env
 ```
 
 You may need to run these commands to make the files executable
 ```sh
-chmod +x ~path_to_SolidBin/auxiliary/test_getmarker.pl
-chmod +x ~path_to_SolidBin/auxiliary/FragGeneScan1.19/run_FragGeneScan.pl
-chmod +x ~path_to_SolidBin/auxiliary/hmmer-3.1b1/bin/hmmsearch
-chmod +x ~path_to_SolidBin/auxiliary/auxiliary/FragGeneScan1.19/FragGeneScan
+chmod +x ~path_to_MetaBinner/auxiliary/test_getmarker.pl
+chmod +x ~path_to_MetaBinner/auxiliary/FragGeneScan1.19/run_FragGeneScan.pl
+chmod +x ~path_to_MetaBinner/auxiliary/hmmer-3.1b1/bin/hmmsearch
+chmod +x ~path_to_MetaBinner/auxiliary/FragGeneScan1.19/FragGeneScan
 ```

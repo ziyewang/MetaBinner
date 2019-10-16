@@ -51,3 +51,6 @@ You input directory should look like this:
 ```
 
 For conda environment , you should check whether perl is installed.
+
+### Input files
+You need to run scripts/run.sh input_path/contigs.fasta contigs_length_threshold kmer_length to obtain the composition profiles and the coverage profiles (only short read samples; only long read samples)

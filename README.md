@@ -63,3 +63,61 @@ scripts/run.sh input_path/contigs.fasta contigs_length_threshold kmer_length
 ./run.sh input_path/contigs.fasta 1000 4
 ```
 Note:The coverage_new.tsv file should be put into the "input_path" and if the sample numbers of the long read samples and the short read samples are different, you need to change the "split_coverage.py"
+
+## <a name="usage"></a>Usage
+
+
+> - Usage:         [--contig_file CONTIG_FILE]
+                   [--coverage_profiles COVERAGE_PROFILES]
+                   [--composition_profiles COMPOSITION_PROFILES]
+                   [--output OUTPUT] [--log LOG] [--clusters CLUSTERS]
+                   [--use_hmm] [--hmm_icm_path HMM_ICM_PATH]
+                   [--hmm_file HMM_FILE]
+                   [--pacbio_read_profiles PACBIO_READ_PROFILES]
+                   [--binscore BINSCORE]
+
+> - arguments
+
+  	--contig_file CONTIG_FILE: 
+              The contigs file.
+	
+  	--coverage_profiles COVERAGE_PROFILES: 
+              The coverage_profiles, containing a table where each
+              row correspond to a contig, and each column correspond
+              to a sample. All values are separated with tabs. (the coverage profiles of short read samples)
+  	--composition_profiles COMPOSITION_PROFILES: 
+              The composition profiles, containing a table where
+              each row correspond to a contig, and each column
+              correspond to the kmer composition of particular kmer.
+              All values are separated with comma.
+	
+  	--output OUTPUT:
+              The output file, storing the binning result.
+              
+> - optional
+
+    --log LOG_LOCATION:
+              The log file, storing the binning process and parameters.
+              
+    --clusters CLUSTERS: 
+              Specify the number of clusters. If not specified, the
+              cluster number is estimated by single-copy genes.
+              
+    --pacbio_read_profiles PACBIO_READ_PROFILES:
+              The coverage_profiles, containing a table where each
+              row correspond to a contig, and each column correspond
+              to a sample. All values are separated with tabs. (the coverage profiles of long read samples)
+    
+    --binscore BINSCORE:
+              The value of Das_tool bin score threshold. Default is 0.3 in the tool.
+              
+    --use_hmm:
+              Use hidden markov model score.
+    
+    --hmm_icm_path HMM_ICM_PATH:
+             Metabinner/hmm_data/hmm/
+
+    
+    
+              
+

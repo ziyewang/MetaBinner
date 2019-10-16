@@ -36,7 +36,7 @@ For the coverage profile we use minimap, since it can address both short read an
 You can put the files into your input directory, then slightly modify gen_cov.sh and run it.
 minimap2, samtools and bedtools are need to be installed to run gen_cov.sh
 
-You input directory should look like this:
+Your input directory should look like this:
 
 ```
 .
@@ -62,4 +62,4 @@ scripts/run.sh input_path/contigs.fasta contigs_length_threshold kmer_length
 ```sh
 ./run.sh input_path/contigs.fasta 1000 4
 ```
-Note:The coverage_new.tsv file should be put into the "input_path" and if the sample numbers of the long read samples and the short read samples are not different, you may need to change the "split_coverage.py"
+Note:The coverage_new.tsv file should be put into the "input_path" and if the sample numbers of the long read samples and the short read samples are different, you need to change the "split_coverage.py"

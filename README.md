@@ -21,7 +21,7 @@ conda activate metabinner_env
 Then install minimap2, samtools, bedtools using conda.
 
 ```sh
-conda install -c bioconda minimap2 samtools bedtools 
+conda install -c bioconda minimap2 samtools bedtools click
 ```
 
 Set checkM data path as described in [here](https://github.com/Ecogenomics/CheckM/wiki/Installation)

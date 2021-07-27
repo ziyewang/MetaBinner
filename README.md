@@ -1,4 +1,4 @@
-# MetaBinner: imporving large scale binning performance with ensemble K-means by considering multiple types of features.
+# MetaBinner: imporving large scale binning performance with ensemble K-means by considering multiple types of features. (to be updated soon)
 
 ## <a name="started"></a>Getting Started
 

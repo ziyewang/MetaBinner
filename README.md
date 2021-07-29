@@ -1,146 +1,147 @@
-# MetaBinner: imporving large scale binning performance with ensemble K-means by considering multiple types of features. (to be updated soon)
+# Metabinner
+GitHub repository for the manuscript "Metabinner: a stand-alone ensemble binning method to recover individual genomes from complex microbial communities"
 
 ## <a name="started"></a>Getting Started
 
 ### <a name="docker"></a>Conda
 
-We recommend using conda to run Metabinner. Download [here](https://www.continuum.io/downloads)
+We recommend using conda to run MetaBinner.
 
-After installing Anaconda (or miniconda), fisrt obtain Metabinner:
+### <a name="docker"></a>Obtain codes and create an environment
+After installing Anaconda (or miniconda), fisrt obtain MetaBinner:
 
 ```sh
-git clone https://github.com/ziyewang/MetaBinner
+git clone https://github.com/ziyewang/MetaBinner.git
 ```
 Then simply create a metabinner environment 
 
 ```sh
+cd metabinner_path
 conda env create -f metabinner_env.yaml
 conda activate metabinner_env
 ```
 
-Then install minimap2, samtools, bedtools using conda.
+### <a name="docker"></a>Install checkM (python3 version) like this
+
+(please make sure you have installed openssl)
 
 ```sh
-conda install -c bioconda minimap2 samtools bedtools click
+cd CheckM-1.0.18
+python setup.py install
+```
+Install checkM database:
+
+CheckM relies on a number of precalculated data files which can be downloaded from https://data.ace.uq.edu.au/public/CheckM_databases/. (More details are available at https://github.com/Ecogenomics/CheckM/wiki/Installation#how-to-install-checkm):
+
+```sh
+mkdir <checkm_data_dir>
+cd <checkm_data_dir>
+wget https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz
+tar xzf checkm_data_2015_01_16.tar.gz 
+checkm data setRoot .
 ```
 
-Set checkM data path as described in [here](https://github.com/Ecogenomics/CheckM/wiki/Installation)
+CheckM requires the following programs to be added to your system path:
+
+HMMER (>=3.1b1)
+
+prodigal (2.60 or >=2.6.1)
+executable must be named prodigal and not prodigal.linux
+
+pplacer (>=1.1)
+;guppy, which is part of the pplacer package, must also be on your system path;
+pplacer binaries can be found on the pplacer GitHub page
+
+or you can install the dependencies as follows:
 ```sh
-checkm data setRoot <checkm_data_dir>
+conda install -c bioconda prodigal
+conda install -c bioconda hmmer 
+conda install -c bioconda pplacer
 ```
 
-You may need to run these commands to make the files executable
-```sh
-chmod +x ~path_to_MetaBinner/auxiliary/test_getmarker.pl
-chmod +x ~path_to_MetaBinner/auxiliary/FragGeneScan1.19/run_FragGeneScan.pl
-chmod +x ~path_to_MetaBinner/auxiliary/hmmer-3.1b1/bin/hmmsearch
-chmod +x ~path_to_MetaBinner/auxiliary/FragGeneScan1.19/FragGeneScan
-```
+## <a name="preprocessing"></a>Preprocessing
+
+The preprocessing steps aim to generate coverage profile and composition profile as input to our program.
+
+There are several binning methods that can generate these two types of information (such as CONCOCT and MetaWRAP) and we provide one method to generate the input files as follows.
 ### Coverage Profile
-For the coverage profile we use minimap, since it can address both short read and long read samples.
+The coverage profiles of the contigs for the results in the manuscript were obtained via MetaWRAP 1.2.1 script: ``binning.sh".
 
-You can put the files into your input directory, then slightly modify gen_cov.sh and run it.
-minimap2, samtools and bedtools are need to be installed to run gen_cov.sh
-
-Your input directory should look like this:
-
-```
-.
-+-- assembly.fasta
-+-- sr
-|   +-- short_read_sample_1
-|   +-- short_read_sample_2
-+-- pb
-|   +-- pacbio_sample_1
-|   +-- pacbio_sample_2
-|   +-- pacbio_sample_3
-```
-
-For conda environment, you should check whether perl is installed.
-
-### Input files
-You need to run like this to obtain the composition profiles and the coverage profiles (only short read samples; only long read samples)
+If users have obtained the coverage (depth) file generated for MaxBin (mb2_master_depth.txt) using MetaWRAP, they can run the following command to generate the input coverage file for MeatBinner:
 ```sh
-scripts/run.sh input_path/contigs.fasta contigs_length_threshold kmer_length
+cat mb2_master_depth.txt | cut -f -1,4- > ${out}/coverage_profile.tsv
+```
+or remove the contigs no longer than 1000bp like this:
+```sh
+cat mb2_master_depth.txt | awk '{if ($2>1000) print $0 }' | cut -f -1,4- > coverage_profile_f1k.tsv
+
 ```
 
-"contigs_length_threshold" means only the contigs longer than the value are kept for binning. For example,
-```sh
-./run.sh input_path/contigs.fasta 1000 4
+If users would like to generate coverage from sequencing reads directly, then can run the script slightly modified from the "binning.sh" of MetaWRAP. The script support different types of sequencing reads, and the defalut type is "paired" ([readsX_1.fastq readsX_2.fastq ...]).
 ```
-Note:The coverage_new.tsv file should be put into the "input_path" and if the sample numbers of the long read samples and the short read samples are different, you need to change the "split_coverage.py"
+bash gen_coverage_file.sh -a contig_file \
+-o output_dir_of_coveragefile \
+path_to_sequencing_reads/*fastq
 
-## <a name="usage"></a>Usage
+Options:
+
+        -a STR          metagenomic assembly file
+        -o STR          output directory
+        -t INT          number of threads (default=1)
+        -m INT          amount of RAM available (default=4)
+        -l INT          minimum contig length to bin (default=1000bp).
+        --single-end    non-paired reads mode (provide *.fastq files)
+        --interleaved   the input read files contain interleaved paired-end reads
+
+```
+
+### Composition Profile
+
+Composition profile is the vector representation of contigs and we use kmer (k=4 in the example) to generate this information. Users can keep the contigs longer than contig_length_threshold, such as 1000, for binning as follows:
+
+```
+python scripts/gen_kmer.py test_data/final.contigs_f1k.fa 1000 4 
+```
+Here we choose k=4. By default we usually keep contigs longer than 1000, you can specify a different number. The kmer_file will be generated in the /path/to/contig_file. 
+
+And the user can run the following command to keep the contigs longer than 1000bp for binning.
+
+```
+python scripts/filter_tooshort.py test_data/final.contigs_f1k.fa 1000
+```
 
 
-> - Usage:         [--contig_file CONTIG_FILE]
-                   [--coverage_profiles COVERAGE_PROFILES]
-                   [--composition_profiles COMPOSITION_PROFILES]
-                   [--output OUTPUT] [--log LOG] [--clusters CLUSTERS]
-                   [--use_hmm] [--hmm_icm_path HMM_ICM_PATH]
-                   [--hmm_file HMM_FILE]
-                   [--pacbio_read_profiles PACBIO_READ_PROFILES]
-                   [--binscore BINSCORE]
-
-> - arguments
-
-  	--contig_file CONTIG_FILE: 
-              The contigs file.
-	
-  	--coverage_profiles COVERAGE_PROFILES: 
-              The coverage_profiles, containing a table where each
-              row correspond to a contig, and each column correspond
-              to a sample. All values are separated with tabs. (the coverage profiles of short read samples)
-  	--composition_profiles COMPOSITION_PROFILES: 
-              The composition profiles, containing a table where
-              each row correspond to a contig, and each column
-              correspond to the kmer composition of particular kmer.
-              All values are separated with comma.
-	
-  	--output OUTPUT:
-              The output file, storing the binning result.
-              
-> - optional
-
-    --log LOG_LOCATION:
-              The log file, storing the binning process and parameters.
-              
-    --clusters CLUSTERS: 
-              Specify the number of clusters. If not specified, the
-              cluster number is estimated by single-copy genes.
-              
-    --pacbio_read_profiles PACBIO_READ_PROFILES:
-              The coverage_profiles, containing a table where each
-              row correspond to a contig, and each column correspond
-              to a sample. All values are separated with tabs. (the coverage profiles of long read samples)
-    
-    --binscore BINSCORE:
-              The value of Das_tool bin score threshold. Default is 0.3 in the tool.
-              
-    --use_hmm:
-              Use hidden markov model score.
-    
-    --hmm_icm_path HMM_ICM_PATH:
-             Metabinner/hmm_data/hmm/
-
+An example to run MetaBinner:
 ```sh
-OPENBLAS_NUM_THREADS=1 python Metabinner.py --contig_file input_path/contigs.fasta --coverage_profiles input_path/coverage_sr_new.tsv --composition_profiles input_path/kmer_4_f0.csv --output output_path/result.tsv --log output_path/result.log --pacbio_read_profiles input_path/coverage_pb_new.tsv --use_hmm --hmm_icm_path path_to_MetaBinner/hmm_data/hmm/
+
+#path to MetaBinner
+metabinner_path=/home/wzy/MetaBinner
+##test data
+#path to the input files for MetaBinner and the output dir:
+contig_file=/home/wzy/MetaBinner/test_data/final_contigs_f1k.fa
+output_dir=/home/wzy/MetaBinner/test_data/output
+coverage_profiles=/home/wzy/MetaBinner/test_data/coverage_profile_f1k.tsv
+kmer_profile=/home/wzy/MetaBinner/test_data/kmer_4_f1000.csv
+
+
+bash run_metabinner.sh -a ${contig_file} -o ${output_dir} -d ${coverage_profiles} -k ${kmer_profile} -p ${metabinner_path}
+
+
+#The file "metabinner_result.tsv" in the "${output_dir}/metabinner_res" is the final output.
 ```
 
 ## <a name="preprocessing"></a>Contacts and bug reports
-Please send bug reports or questions (such as the appropriate modes for your datasets) to
+Please send bug reports or questions to
 Ziye Wang: zwang17@fudan.edu.cn and Dr. Shanfeng Zhu: zhusf@fudan.edu.cn
 
 ## <a name="preprocessing"></a>References
-         
 
-[1] Parks DH, Imelfort M, Skennerton CT, Hugenholtz P, Tyson GW. 2015. "CheckM: assessing the quality of microbial genomes recovered from isolates, single cells, and metagenomes." Genome Research, 25: 1043–1055.
+[1] Lu, Yang Young, et al. "COCACOLA: binning metagenomic contigs using sequence COmposition, read CoverAge, CO-alignment and paired-end read LinkAge." Bioinformatics 33.6 (2017): 791-798.
 
-[2] Graham ED, Heidelberg JF, Tully BJ. (2017) "BinSanity: unsupervised clustering of environmental microbial assemblies using coverage and affinity propagation." PeerJ 5:e3035
+[2] https://github.com/dparks1134/UniteM.
 
-[3] Wang Z., Wang Z., et al.(2019) "SolidBin: Improving Metagenome Binning with Semi-supervised Normalized Cut." Bioinformatics. 2019 Apr 12. pii: btz253. 
+[3] Parks, Donovan H., et al. "CheckM: assessing the quality of microbial genomes recovered from isolates, single cells, and metagenomes." Genome research 25.7 (2015): 1043-1055.
 
 [4] Christian M. K. Sieber, Alexander J. Probst., et al. (2018). "Recovery of genomes from metagenomes via a dereplication, aggregation and scoring strategy". Nature Microbiology. https://doi.org/10.1038/s41564-018-0171-1.
 
-[5] Kelley,D.,and Salzberg,S.(2010). "Clustering metagenomic sequences with interpolated markov models". BMC Bioinformatics 11:544. doi:10.1186/1471-2105-11-544
-
+[5] Uritskiy, Gherman V., Jocelyne DiRuggiero, and James Taylor. "MetaWRAP—a flexible pipeline for genome-resolved metagenomic data analysis." Microbiome 6.1 (2018): 1-13.

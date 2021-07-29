@@ -110,8 +110,9 @@ And the user can run the following command to keep the contigs longer than 1000b
 python scripts/filter_tooshort.py test_data/final.contigs_f1k.fa 1000
 ```
 
+
+## <a name="started"></a>An example to run MetaBinner:
 Test data is available at https://drive.google.com/file/d/1a-IOOpklXQr_C4sgNxjsxGEkx-n-0aa4/view?usp=sharing
-An example to run MetaBinner:
 ```sh
 
 #path to MetaBinner

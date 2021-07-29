@@ -127,6 +127,16 @@ kmer_profile=/home/wzy/MetaBinner/test_data/kmer_4_f1000.csv
 
 bash run_metabinner.sh -a ${contig_file} -o ${output_dir} -d ${coverage_profiles} -k ${kmer_profile} -p ${metabinner_path}
 
+Options:
+
+        -a STR          metagenomic assembly file
+        -o STR          output directory
+        -d STR          coverage_profile.tsv; The coverage profiles, containing a table where each row correspond
+                            to a contig, and each column correspond to a sample. All values are separated with tabs.
+        -k STR          kmer_profile.csv; The composition profiles, containing a table where each row correspond to a contig,
+                            and each column correspond to the kmer composition of particular kmer. All values are separated with comma.
+        -p STR          path to MetaBinner; e.g. /home/wzy/MetaBinner
+        -t INT          number of threads (default=10)
 
 #The file "metabinner_result.tsv" in the "${output_dir}/metabinner_res" is the final output.
 ```

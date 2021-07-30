@@ -1,5 +1,5 @@
 # Metabinner
-GitHub repository for the manuscript "Metabinner: a stand-alone ensemble binning method to recover individual genomes from complex microbial communities"
+GitHub repository for the manuscript "Metabinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities"
 
 ## <a name="started"></a>Getting Started
 

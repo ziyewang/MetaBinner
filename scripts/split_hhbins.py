@@ -95,19 +95,17 @@ def gen_X(com_file, cov_file):
     X_t = np.hstack((covMat, compositMat))  # del * 1e1
     return X_t, namelist, mapObj, covMat, compositMat
 
+def gen_seed(contig_file, threads, contig_length_threshold, marker_name="marker", quarter="3quarter"):
+    fragScanURL = 'run_FragGeneScan.pl'
+    #os.system("chmod 777 " + fragScanURL)
+    os.system("chmod 777 " + os.path.join(os.getcwd(), '../auxiliary', 'FGS_gff.py'))
 
-def gen_seed(contig_file, threads, marker_name="marker", quarter="3quarter"):
-    fragScanURL = os.path.join(os.getcwd(), 'auxiliary', 'FragGeneScan1.19', 'run_FragGeneScan.pl')
-    os.system("chmod 777 " + fragScanURL)
-    os.system("chmod 777 " + os.path.join(os.getcwd(), 'auxiliary', 'FragGeneScan1.19', 'FGS_gff.py'))
-    os.system("chmod 777 " + os.path.join(os.getcwd(), 'auxiliary', 'FragGeneScan1.19', 'FragGeneScan'))
-
-    hmmExeURL = os.path.join(os.getcwd(), 'auxiliary', 'hmmer-3.1b1', 'bin', 'hmmsearch')
-    os.system("chmod 777 " + hmmExeURL)
-    markerExeURL = os.path.join(os.getcwd(), 'auxiliary', 'test_getmarker_' + quarter + '.pl')
+    hmmExeURL = 'hmmsearch'
+    #os.system("chmod 777 " + hmmExeURL)
+    markerExeURL = os.path.join(os.getcwd(), '../auxiliary', 'test_getmarker_' + quarter + '.pl')
     os.system("chmod 777 " + markerExeURL)
-    markerURL = os.path.join(os.getcwd(), 'auxiliary', marker_name + '.hmm')
-    seedURL = contig_file + "." + marker_name + "." + quarter + ".seed"
+    markerURL = os.path.join(os.getcwd(), '../auxiliary', marker_name + '.hmm')
+    seedURL = contig_file + "." + marker_name + "." + quarter + "_lencutoff_" + str(contig_length_threshold) + ".seed"
     fragResultURL = contig_file + ".frag.faa"
     hmmResultURL = contig_file + '.' + marker_name + ".hmmout"
 
@@ -126,7 +124,8 @@ def gen_seed(contig_file, threads, marker_name="marker", quarter="3quarter"):
 
         if os.path.exists(hmmResultURL):
             if not (os.path.exists(seedURL)):
-                markerCmd = markerExeURL + " " + hmmResultURL + " " + contig_file + " 1001 " + seedURL
+                markerCmd = markerExeURL + " " + hmmResultURL + " " + contig_file + " " + str(
+                    contig_length_threshold) + " " + seedURL
                 logger.info("exec cmd: " + markerCmd)
                 os.system(markerCmd)
 

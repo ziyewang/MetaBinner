@@ -21,43 +21,6 @@ conda env create -f metabinner_env.yaml
 conda activate metabinner_env
 ```
 
-### <a name="docker"></a>Install checkM (python3 version) like this
-
-(please make sure you have installed openssl)
-
-```sh
-cd CheckM-1.0.18
-python setup.py install
-```
-Install checkM database:
-
-CheckM relies on a number of precalculated data files which can be downloaded from https://data.ace.uq.edu.au/public/CheckM_databases/. (More details are available at https://github.com/Ecogenomics/CheckM/wiki/Installation#how-to-install-checkm):
-
-```sh
-mkdir <checkm_data_dir>
-cd <checkm_data_dir>
-wget https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz
-tar xzf checkm_data_2015_01_16.tar.gz 
-checkm data setRoot .
-```
-
-CheckM requires the following programs to be added to your system path:
-
-HMMER (>=3.1b1)
-
-prodigal (2.60 or >=2.6.1)
-executable must be named prodigal and not prodigal.linux
-
-pplacer (>=1.1)
-;guppy, which is part of the pplacer package, must also be on your system path;
-pplacer binaries can be found on the pplacer GitHub page
-
-or you can install the dependencies as follows:
-```sh
-conda install -c bioconda prodigal
-conda install -c bioconda hmmer 
-conda install -c bioconda pplacer
-```
 
 ## <a name="preprocessing"></a>Preprocessing
 

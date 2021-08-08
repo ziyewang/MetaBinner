@@ -104,11 +104,11 @@ Options:
 #The file "metabinner_result.tsv" in the "${output_dir}/metabinner_res" is the final output.
 ```
 
-## <a name="preprocessing"></a>Contacts and bug reports
+## <a name="contact"></a>Contacts and bug reports
 Please send bug reports or questions to
 Ziye Wang: zwang17@fudan.edu.cn and Dr. Shanfeng Zhu: zhusf@fudan.edu.cn
 
-## <a name="preprocessing"></a>References
+## <a name="References"></a>References
 
 [1] Lu, Yang Young, et al. "COCACOLA: binning metagenomic contigs using sequence COmposition, read CoverAge, CO-alignment and paired-end read LinkAge." Bioinformatics 33.6 (2017): 791-798.
 
@@ -119,3 +119,9 @@ Ziye Wang: zwang17@fudan.edu.cn and Dr. Shanfeng Zhu: zhusf@fudan.edu.cn
 [4] Christian M. K. Sieber, Alexander J. Probst., et al. (2018). "Recovery of genomes from metagenomes via a dereplication, aggregation and scoring strategy". Nature Microbiology. https://doi.org/10.1038/s41564-018-0171-1.
 
 [5] Uritskiy, Gherman V., Jocelyne DiRuggiero, and James Taylor. "MetaWRAP—a flexible pipeline for genome-resolved metagenomic data analysis." Microbiome 6.1 (2018): 1-13.
+
+[6] Meyer, Fernando, et al. "Critical Assessment of Metagenome Interpretation-the second round of challenges." bioRxiv (2021).
+
+## <a name="Citation"></a>Citation
+
+Wang, Z., Huang, P., You, R., Sun, F., & Zhu, S. (2021). MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities. bioRxiv.

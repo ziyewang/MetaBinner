@@ -89,12 +89,13 @@ def gen_X(com_file, cov_file):
 
 
 def gen_seed(contig_file, threads, contig_length_threshold, marker_name="marker", quarter="3quarter"):
-    fragScanURL = 'run_FragGeneScan.pl'
-    #os.system("chmod 777 " + fragScanURL)
-    os.system("chmod 777 " + os.path.join(os.getcwd(), '../auxiliary', 'FGS_gff.py'))
+    fragScanURL = os.path.join(os.getcwd(), '../auxiliary', 'FragGeneScan1.19', 'run_FragGeneScan.pl')
+    os.system("chmod 777 " + fragScanURL)
+    os.system("chmod 777 " + os.path.join(os.getcwd(), '../auxiliary', 'FragGeneScan1.19', 'FGS_gff.py'))
+    os.system("chmod 777 " + os.path.join(os.getcwd(), '../auxiliary', 'FragGeneScan1.19', 'FragGeneScan'))
 
-    hmmExeURL = 'hmmsearch'
-    #os.system("chmod 777 " + hmmExeURL)
+    hmmExeURL = os.path.join(os.getcwd(), '../auxiliary', 'hmmer-3.1b1', 'bin', 'hmmsearch')
+    os.system("chmod 777 " + hmmExeURL)
     markerExeURL = os.path.join(os.getcwd(), '../auxiliary', 'test_getmarker_' + quarter + '.pl')
     os.system("chmod 777 " + markerExeURL)
     markerURL = os.path.join(os.getcwd(), '../auxiliary', marker_name + '.hmm')

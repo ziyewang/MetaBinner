@@ -95,17 +95,18 @@ def gen_X(com_file, cov_file):
     X_t = np.hstack((covMat, compositMat))  # del * 1e1
     return X_t, namelist, mapObj, covMat, compositMat
 
-def gen_seed(contig_file, threads, contig_length_threshold, marker_name="marker", quarter="3quarter"):
-    fragScanURL = 'run_FragGeneScan.pl'
-    #os.system("chmod 777 " + fragScanURL)
-    os.system("chmod 777 " + os.path.join(os.getcwd(), '../auxiliary', 'FGS_gff.py'))
+def gen_seed(contig_file, threads, marker_name="marker", quarter="3quarter"):
+    fragScanURL = os.path.join(os.getcwd(), 'auxiliary', 'FragGeneScan1.19', 'run_FragGeneScan.pl')
+    os.system("chmod 777 " + fragScanURL)
+    os.system("chmod 777 " + os.path.join(os.getcwd(), 'auxiliary', 'FragGeneScan1.19', 'FGS_gff.py'))
+    os.system("chmod 777 " + os.path.join(os.getcwd(), 'auxiliary', 'FragGeneScan1.19', 'FragGeneScan'))
 
-    hmmExeURL = 'hmmsearch'
-    #os.system("chmod 777 " + hmmExeURL)
-    markerExeURL = os.path.join(os.getcwd(), '../auxiliary', 'test_getmarker_' + quarter + '.pl')
+    hmmExeURL = os.path.join(os.getcwd(), 'auxiliary', 'hmmer-3.1b1', 'bin', 'hmmsearch')
+    os.system("chmod 777 " + hmmExeURL)
+    markerExeURL = os.path.join(os.getcwd(), 'auxiliary', 'test_getmarker_' + quarter + '.pl')
     os.system("chmod 777 " + markerExeURL)
-    markerURL = os.path.join(os.getcwd(), '../auxiliary', marker_name + '.hmm')
-    seedURL = contig_file + "." + marker_name + "." + quarter + "_lencutoff_" + str(contig_length_threshold) + ".seed"
+    markerURL = os.path.join(os.getcwd(), 'auxiliary', marker_name + '.hmm')
+    seedURL = contig_file + "." + marker_name + "." + quarter + ".seed"
     fragResultURL = contig_file + ".frag.faa"
     hmmResultURL = contig_file + '.' + marker_name + ".hmmout"
 
@@ -124,8 +125,7 @@ def gen_seed(contig_file, threads, contig_length_threshold, marker_name="marker"
 
         if os.path.exists(hmmResultURL):
             if not (os.path.exists(seedURL)):
-                markerCmd = markerExeURL + " " + hmmResultURL + " " + contig_file + " " + str(
-                    contig_length_threshold) + " " + seedURL
+                markerCmd = markerExeURL + " " + hmmResultURL + " " + contig_file + " 1001 " + seedURL
                 logger.info("exec cmd: " + markerCmd)
                 os.system(markerCmd)
 
@@ -141,7 +141,6 @@ def gen_seed(contig_file, threads, contig_length_threshold, marker_name="marker"
         logger.info("FragGeneScan failed! Not exist: " + fragResultURL)
         sys.exit()
     return candK
-
 
 # estimate bin_number from candk
 def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):

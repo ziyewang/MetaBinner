@@ -1,0 +1,36 @@
+
+python=3.7.6=h357f687_2
+
+conda create -n metabinner_test python=3.7.6
+
+biopython=1.76
+numpy=1.18.1
+pandas=1.0.1
+click=7.1.2
+scipy=1.4.1
+scikit-learn=0.22.1
+biolib=0.1.6
+hmmer=3.3.2
+prodigal=2.6.3
+pplacer=1.1.alpha19
+checkm-genome=1.1.3
+bwa=0.7.17
+samtools=1.9
+
+conda install --yes --file requirements.txt
+
+conda install -c bioconda prodigal
+conda install -c bioconda hmmer
+conda install -c bioconda pplacer
+
+conda install -c bioconda checkm-genome
+
+conda install -c bioconda bwa
+conda install -c bioconda samtools=1.9
+#conda install openssl
+
+bwa=0.7.17=hed695b0_7
+samtools=1.9=h10a08f8_12
+hmmer
+
+, mimetypes,

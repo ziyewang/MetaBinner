@@ -18,7 +18,8 @@ requirements:
     - biopython 1.76
     - bwa 0.7.17
     - click 7.1.2
-    - hmmer 3.3.2
+    - hmmer 3.1b2
+    - fraggenescan 1.31
     - numpy 1.18.1
     - pandas 1.0.1
     - pplacer 1.1.alpha19

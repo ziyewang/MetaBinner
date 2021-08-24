@@ -3,9 +3,17 @@ GitHub repository for the manuscript "Metabinner: a high-performance and stand-a
 
 ## <a name="started"></a>Getting Started
 
-### <a name="docker"></a>Conda
+### <a name="docker"></a>Install MetaBinner via bioconda
+```sh
+conda create -n metabinner_env python=3.7.6
+```
+```sh
+conda activate metabinner_env
+conda install -c bioconda metabinner
+```
 
-We recommend using conda to run MetaBinner.
+### <a name="docker"></a>Install MetaBinner via source code
+
 
 ### <a name="docker"></a>Obtain codes and create an environment
 After installing Anaconda (or miniconda), fisrt obtain MetaBinner:
@@ -80,6 +88,8 @@ Test data is available at https://drive.google.com/file/d/1a-IOOpklXQr_C4sgNxjsx
 
 #path to MetaBinner
 metabinner_path=/home/wzy/MetaBinner
+Note: If users intall metabinner via bioconda, they can set metabinner_paths as follows: metabinner_path=$(dirname $(which run_metabinner.sh))
+
 ##test data
 #path to the input files for MetaBinner and the output dir:
 contig_file=/home/wzy/MetaBinner/test_data/final_contigs_f1k.fa

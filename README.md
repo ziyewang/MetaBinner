@@ -15,7 +15,7 @@ conda install -c bioconda metabinner
 ### <a name="docker"></a>or Install MetaBinner via source code
 
 
-### <a name="docker"></a>Obtain codes and create an environment
+Obtain codes and create an environment:
 After installing Anaconda (or miniconda), fisrt obtain MetaBinner:
 
 ```sh

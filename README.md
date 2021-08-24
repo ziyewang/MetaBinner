@@ -12,7 +12,7 @@ conda activate metabinner_env
 conda install -c bioconda metabinner
 ```
 
-### <a name="docker"></a>Install MetaBinner via source code
+### <a name="docker"></a>or Install MetaBinner via source code
 
 
 ### <a name="docker"></a>Obtain codes and create an environment

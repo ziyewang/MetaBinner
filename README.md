@@ -78,7 +78,7 @@ Here we choose k=4. By default we usually keep contigs longer than 1000, you can
 And the user can run the following command to keep the contigs longer than 1000bp for binning.
 
 ```
-python scripts/filter_tooshort.py test_data/final.contigs_f1k.fa 1000
+python scripts/Filter_tooshort.py test_data/final.contigs_f1k.fa 1000
 ```
 
 

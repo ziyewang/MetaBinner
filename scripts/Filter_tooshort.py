@@ -22,7 +22,7 @@ def main(input_file, k):
         for key in items:
             length=int(len(items[key]))
             if length > k :
-                fout1.write(key+'\n'+str(items[key])+'\n')
+                fout1.write('>'+key+'\n'+str(items[key])+'\n')
                 fout2.write(key+'\t'+str(length)+'\n')
     print('finished')
 

@@ -101,7 +101,6 @@ def gen_seed(contig_file, threads, marker_name="marker", quarter="3quarter"):
 
     hmmExeURL = 'hmmsearch'
     markerExeURL = os.path.join(os.getcwd(), 'auxiliary', 'test_getmarker_' + quarter + '.pl')
-    os.system("chmod 777 " + markerExeURL)
     markerURL = os.path.join(os.getcwd(), 'auxiliary', marker_name + '.hmm')
     seedURL = contig_file + "." + marker_name + "." + quarter + ".seed"
     fragResultURL = contig_file + ".frag.faa"

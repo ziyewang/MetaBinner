@@ -1,5 +1,5 @@
-# Metabinner
-GitHub repository for the manuscript "Metabinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities"
+# MetaBinner
+GitHub repository for the manuscript "MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities"
 
 ## <a name="started"></a>Getting Started
 
@@ -38,7 +38,7 @@ There are several binning methods that can generate these two types of informati
 ### Coverage Profile
 The coverage profiles of the contigs for the results in the manuscript were obtained via MetaWRAP 1.2.1 script: ``binning.sh".
 
-If users have obtained the coverage (depth) file generated for MaxBin (mb2_master_depth.txt) using MetaWRAP, they can run the following command to generate the input coverage file for MeatBinner:
+If users have obtained the coverage (depth) file generated for MaxBin (mb2_master_depth.txt) using MetaWRAP, they can run the following command to generate the input coverage file for MetaBinner:
 ```sh
 cat mb2_master_depth.txt | cut -f -1,4- > ${out}/coverage_profile.tsv
 ```

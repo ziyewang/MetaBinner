@@ -21,10 +21,10 @@ After installing Anaconda (or miniconda), fisrt obtain MetaBinner:
 ```sh
 git clone https://github.com/ziyewang/MetaBinner.git
 ```
-Then simply create a metabinner environment 
+Then simply create a environment to run MetaBinner.
 
 ```sh
-cd metabinner_path
+cd MetaBinner
 conda env create -f metabinner_env.yaml
 conda activate metabinner_env
 ```

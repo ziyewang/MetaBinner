@@ -75,7 +75,7 @@ python scripts/gen_kmer.py test_data/final.contigs_f1k.fa 1000 4
 ```
 Here we choose k=4. By default we usually keep contigs longer than 1000, you can specify a different number. The kmer_file will be generated in the /path/to/contig_file. 
 
-And the user can run the following command to keep the contigs longer than 1000bp for binning.
+And the users can run the following command to keep the contigs longer than 1000bp for binning.
 
 ```
 python scripts/Filter_tooshort.py test_data/final.contigs_f1k.fa 1000
@@ -115,8 +115,8 @@ Options:
 ```
 
 ## <a name="contact"></a>Contacts and bug reports
-Please send bug reports or questions to
-Ziye Wang: zwang17@fudan.edu.cn and Dr. Shanfeng Zhu: zhusf@fudan.edu.cn
+Please feel free to send bug reports or questions to
+Ziye Wang: zwang17@fudan.edu.cn and Prof. Shanfeng Zhu: zhusf@fudan.edu.cn
 
 ## <a name="References"></a>References
 

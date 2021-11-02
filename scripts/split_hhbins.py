@@ -541,7 +541,7 @@ if __name__ == '__main__':
             contigs[seq_id] = seq
 
         domain, comp, cont = markers.bin_quality(bins[bin_id])
-        if comp >= float(args.mincomp) and cont >= float(args.mincont):
+        if comp >= float(args.mincomp) and cont >= float(args.mincont) and len(bins[bin_id]) >= 3:
             split_hhbins(bf_path, mapObj, X_t, length_weight, namelist, out_path, bin_id)
         else:
             temp_bin_file = os.path.join(out_path + bin_id + '.fa')

@@ -59,7 +59,7 @@ mkdir ${output_dir}
 mkdir ${output_dir}/metabinner_res
 
 cd ${metabinner_path}/scripts/
-time python component_binning.py \
+time ./component_binning.py \
 --contig_file ${contig_file} \
 --coverage_profiles ${coverage_profiles} \
 --composition_profiles ${kmer_profile} \
@@ -81,14 +81,14 @@ mkdir ${output_dir}/metabinner_res/unitem_profile
 cp -r ${output_dir}/metabinner_res/intermediate_result/kmeans_length_weight_X_t_logtrans_result.tsv ${output_dir}/metabinner_res/unitem_profile
 res_path=${output_dir}/metabinner_res/unitem_profile/kmeans_length_weight_X_t_logtrans_result.tsv
 
-python ${metabinner_path}/scripts/gen_bins_from_tsv.py \
+${metabinner_path}/scripts/gen_bins_from_tsv.py \
 -f ${contig_file} \
 -r ${res_path} \
 -o ${res_path}_bins
 
 echo -e "X_t_logtrans_ori\t${res_path}_bins" > ${output_dir}/metabinner_res/unitem_profile/bins_dir.tsv
 
-python ${metabinner_path}/scripts/unitem_profile.py --threads ${num_threads} --bin_dirs ${output_dir}/metabinner_res/unitem_profile/bins_dir.tsv \
+${metabinner_path}/scripts/unitem_profile.py --threads ${num_threads} --bin_dirs ${output_dir}/metabinner_res/unitem_profile/bins_dir.tsv \
 --output_dir ${output_dir}/metabinner_res/unitem_profile
 
 if [[ $? -ne 0 ]] ; then echo "Something went wrong with running unitem_profile.py. Exiting.";exit 1; fi
@@ -113,7 +113,7 @@ ls *tsv > ${components_path}.res_namelist.tsv
 cat ${components_path}.res_namelist.tsv | while read LINE
 do
 echo $LINE;
-python ${metabinner_path}/scripts/gen_bins_from_tsv.py \
+${metabinner_path}/scripts/gen_bins_from_tsv.py \
 -f ${contig_file} \
 -r ${components_path}/${LINE} \
 -o ${components_path}/${LINE}_bins
@@ -126,7 +126,7 @@ do
 echo $LINE;
 ori_path=${components_path}/${LINE}_bins
 
-python ${metabinner_path}/scripts/split_hhbins.py \
+${metabinner_path}/scripts/split_hhbins.py \
 --contig_file ${contig_file} \
 --coverage_profiles ${coverage_profiles} \
 --composition_profiles ${kmer_profile} \
@@ -149,7 +149,7 @@ ori_path=${components_path}/${LINE}_bins_post_process_mincomp_70_mincont_50_bins
 
 cd ${metabinner_path}
 
-python ${metabinner_path}/scripts/split_hhbins.py \
+${metabinner_path}/scripts/split_hhbins.py \
 --contig_file ${contig_file} \
 --coverage_profiles ${coverage_profiles} \
 --composition_profiles ${kmer_profile} \
@@ -201,15 +201,15 @@ mkdir ${output_dir}/metabinner_res/ensemble_res/X_com_logtrans_2postprocess
 path=${output_dir}/metabinner_res/ensemble_res
 Method_name=greedy_cont_weight_3_mincomp_50.0_maxcont_15.0_bins
 
-python ${metabinner_path}/scripts/ensemble.py ${bac_mg_table} \
+${metabinner_path}/scripts/ensemble.py ${bac_mg_table} \
 ${ar_mg_table} \
 ${components_path}/2postprocess_X_t_logtrans_bins_dir.tsv \
 ${output_dir}/metabinner_res/ensemble_res/X_t_logtrans_2postprocess &
-python ${metabinner_path}/scripts/ensemble.py ${bac_mg_table} \
+${metabinner_path}/scripts/ensemble.py ${bac_mg_table} \
 ${ar_mg_table} \
 ${components_path}/2postprocess_X_cov_logtrans_bins_dir.tsv \
 ${output_dir}/metabinner_res/ensemble_res/X_cov_logtrans_2postprocess &
-python ${metabinner_path}/scripts/ensemble.py ${bac_mg_table} \
+${metabinner_path}/scripts/ensemble.py ${bac_mg_table} \
 ${ar_mg_table} \
 ${components_path}/2postprocess_X_com_logtrans_bins_dir.tsv \
 ${output_dir}/metabinner_res/ensemble_res/X_com_logtrans_2postprocess &
@@ -249,10 +249,10 @@ binsB=X_cov_logtrans_${Method_name}
 binsC=X_com_logtrans_${Method_name}
 
 
-python ${metabinner_path}/scripts/binning_refiner.py -1 ${binsA} -2 ${binsB} -3 ${binsC} -o Refined_ABC > Refined_ABC.out &
-python ${metabinner_path}/scripts/binning_refiner.py -1 ${binsA} -2 ${binsB} -o Refined_AB > Refined_AB.out &
-python ${metabinner_path}/scripts/binning_refiner.py -1 ${binsA} -2 ${binsC} -o Refined_AC > Refined_AC.out &
-python ${metabinner_path}/scripts/binning_refiner.py -1 ${binsB} -2 ${binsC} -o Refined_BC > Refined_BC.out &
+${metabinner_path}/scripts/binning_refiner.py -1 ${binsA} -2 ${binsB} -3 ${binsC} -o Refined_ABC > Refined_ABC.out &
+${metabinner_path}/scripts/binning_refiner.py -1 ${binsA} -2 ${binsB} -o Refined_AB > Refined_AB.out &
+${metabinner_path}/scripts/binning_refiner.py -1 ${binsA} -2 ${binsC} -o Refined_AC > Refined_AC.out &
+${metabinner_path}/scripts/binning_refiner.py -1 ${binsB} -2 ${binsC} -o Refined_BC > Refined_BC.out &
 
 wait
 
@@ -275,7 +275,7 @@ echo -e "Refined_BC\t${path}/${Method_name}/ensemble_3logtrans/Refined_BC/Refine
 
 mkdir addrefined2and3comps
 
-python ${metabinner_path}/scripts/ensemble.py ${bac_mg_table} \
+${metabinner_path}/scripts/ensemble.py ${bac_mg_table} \
 ${ar_mg_table} \
 ${output_dir}/metabinner_res/ensemble_res/${Method_name}/ensemble_3logtrans/addrefined2and3comps_bins_dir.tsv \
 ${output_dir}/metabinner_res/ensemble_res/${Method_name}/ensemble_3logtrans/addrefined2and3comps
@@ -285,9 +285,5 @@ if [[ $? -ne 0 ]] ; then echo "Something went wrong with running ensemble.py. Ex
 cp -r ${output_dir}/metabinner_res/ensemble_res/${Method_name}/ensemble_3logtrans/addrefined2and3comps/${Method_name}_res.tsv ${output_dir}/metabinner_res/metabinner_result.tsv
 
 echo "Binning Finished!"
-
-
-
-
 
 

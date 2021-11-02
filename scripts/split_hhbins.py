@@ -1,3 +1,5 @@
+#!/usr/bin/env python 
+
 # -*- coding: utf-8 -*-
 # @Author  : ZWang
 # @FileName: Metabinner.py
@@ -97,11 +99,9 @@ def gen_X(com_file, cov_file):
 
 def gen_seed(contig_file, threads, marker_name="marker", quarter="3quarter"):
     fragScanURL = 'run_FragGeneScan.pl'
-    os.system("chmod 777 " + os.path.join(os.getcwd(), 'auxiliary', 'FGS_gff.py'))
 
     hmmExeURL = 'hmmsearch'
     markerExeURL = os.path.join(os.getcwd(), 'auxiliary', 'test_getmarker_' + quarter + '.pl')
-    os.system("chmod 777 " + markerExeURL)
     markerURL = os.path.join(os.getcwd(), 'auxiliary', marker_name + '.hmm')
     seedURL = contig_file + "." + marker_name + "." + quarter + ".seed"
     fragResultURL = contig_file + ".frag.faa"

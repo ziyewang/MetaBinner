@@ -88,7 +88,7 @@ Test data is available at https://drive.google.com/file/d/1a-IOOpklXQr_C4sgNxjsx
 
 #path to MetaBinner
 metabinner_path=/home/wzy/MetaBinner
-Note: If users intall metabinner via bioconda, they can set metabinner_paths as follows: metabinner_path=$(dirname $(which run_metabinner.sh))
+Note: If users intall metabinner via bioconda, they can set metabinner_path as follows: metabinner_path=$(dirname $(which run_metabinner.sh))
 
 ##test data
 #path to the input files for MetaBinner and the output dir:

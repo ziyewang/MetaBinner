@@ -134,4 +134,4 @@ Ziye Wang: zwang17@fudan.edu.cn and Dr. Shanfeng Zhu: zhusf@fudan.edu.cn
 
 ## <a name="Citation"></a>Citation
 
-Wang, Z., Huang, P., You, R., Sun, F., & Zhu, S. (2021). MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities. bioRxiv. https://www.biorxiv.org/content/10.1101/2021.07.25.453671v1.abstract
+Wang, Z., Huang, P., You, R., Sun, F., & Zhu, S. (2021). MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities. bioRxiv. https://doi.org/10.1101/2021.07.25.453671

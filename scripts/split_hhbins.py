@@ -166,7 +166,8 @@ def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
             else:
                 break
         else:
-            break
+            logger.info("bestk:" + str(bestK) + "\tsilVal:" + str(bestSilVal))
+            return bestK
     candK = bestK + 2 * stepK
     bestSilVal_2nd = 0
     for k in range(candK, maxK, stepK):
@@ -536,9 +537,9 @@ if __name__ == '__main__':
             bin_id = bin_id[0:-1]
         bf_path = os.path.join(bin_dir, bf)
 
-        for seq_id, seq in seq_io.read_seq(bf_path):
-            bins[bin_id].add(seq_id)
-            contigs[seq_id] = seq
+        # for seq_id, seq in seq_io.read_seq(bf_path):
+        #     bins[bin_id].add(seq_id)
+        #     contigs[seq_id] = seq
 
         domain, comp, cont = markers.bin_quality(bins[bin_id])
         if comp >= float(args.mincomp) and cont >= float(args.mincont) and len(bins[bin_id]) >= 3:

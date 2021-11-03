@@ -2,7 +2,7 @@
 
 # -*- coding: utf-8 -*-
 # @Author  : ZWang
-# @FileName: Metabinner.py
+# @FileName: component_binning.py (modified for Metabinner.py from earlier version)
 # scikit-learn == 0.22.1
 # python 3.7
 
@@ -40,13 +40,13 @@ def arguments():
 
     parser.add_argument('--contig_file', type=str, help=("The contigs file."))
     parser.add_argument('--coverage_profiles', type=str, help=(
-        "The coverage profiles, containing a table where each row correspond to a contig, and each column correspond to a sample. All values are separated with tabs."))
+        "The coverage profiles, containing a table where each row correspond to a contig, and each column correspond to a sequencing sample. All values are separated with tabs."))
     parser.add_argument('--composition_profiles', type=str, help=(
         "The composition profiles, containing a table where each row correspond to a contig, and each column correspond to the kmer composition of particular kmer. All values are separated with comma."))
     parser.add_argument('--output', type=str, help="The output file, storing the binning result.")
     parser.add_argument('--log', type=str, help="Specify where to store log file")
     parser.add_argument('--clusters', default=0, type=int,
-                        help="Specify the number of clusters. If not specified, the cluster number is estimated by single-copy genes. If the number is smaller than the bin number estimated by MetaBinner, the cluster number will be determined as bin number estimated by MetaBinner.")
+                        help="Specify the number of clusters. If not specified, the cluster number is estimated by single-copy genes. If the specified number is smaller than the bin number estimated by MetaBinner, the cluster number will be determined as bin number estimated by MetaBinner.")
     parser.add_argument('--estimated_k', default=0, type=int,
                         help="Specify the number of estimated clusters by metabinner (only be used when users have obtained the bin number by metabinner). If specified, bin number estimation step will be skipped.")
     parser.add_argument('--threads', default=20, type=int,

@@ -54,9 +54,7 @@ cat mb2_master_depth.txt | awk '{if ($2>1000) print $0 }' | cut -f -1,4- > cover
 
 ```
 
-If users would like to generate coverage from sequencing reads directly, then can run the script slightly modified from the "binning.sh" of MetaWRAP. The script support different types of sequencing reads, and the defalut type is "paired" ([readsX_1.fastq readsX_2.fastq ...]). 
-
-If users intall metabinner via bioconda, they can obtain path_to_MetaBinner via running this command: $(dirname $(which run_metabinner.sh))
+If users would like to generate coverage from sequencing reads directly, then can run the script slightly modified from the "binning.sh" of MetaWRAP. The script support different types of sequencing reads, and the defalut type is "paired" ([readsX_1.fastq readsX_2.fastq ...]). If MetaBinner is installed via bioconda, users can obtain path_to_MetaBinner via running this command: $(dirname $(which run_metabinner.sh))
 
 ```sh
 cd path_to_MetaBinner
@@ -106,7 +104,7 @@ Test data is available at https://drive.google.com/file/d/1a-IOOpklXQr_C4sgNxjsx
 
 #path to MetaBinner
 metabinner_path=/home/wzy/MetaBinner
-Note: If users intall metabinner via bioconda, they can set metabinner_path as follows: metabinner_path=$(dirname $(which run_metabinner.sh))
+Note: If users intall MetaBinner via bioconda, they can set metabinner_path as follows: metabinner_path=$(dirname $(which run_metabinner.sh))
 
 ##test data
 #path to the input files for MetaBinner and the output dir:

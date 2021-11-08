@@ -2,6 +2,7 @@
 GitHub repository for the manuscript "MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities"
 
 MetaBinner consists of two modules: 1) “Component module” includes steps 1-4, developed for generating high-quality, diverse component binning results; and 2) “Ensemble module” includes step 5, developed for recovering individual genomes from the component binning results. 
+
 ![image](https://github.com/ziyewang/MetaBinner/blob/master/figures/framework0613.png)
 
 ## <a name="started"></a>Getting Started

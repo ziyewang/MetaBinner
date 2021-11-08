@@ -55,7 +55,11 @@ cat mb2_master_depth.txt | awk '{if ($2>1000) print $0 }' | cut -f -1,4- > cover
 ```
 
 If users would like to generate coverage from sequencing reads directly, then can run the script slightly modified from the "binning.sh" of MetaWRAP. The script support different types of sequencing reads, and the defalut type is "paired" ([readsX_1.fastq readsX_2.fastq ...]).
-```
+
+```sh
+cd MetaBinner
+cd scripts
+
 bash gen_coverage_file.sh -a contig_file \
 -o output_dir_of_coveragefile \
 path_to_sequencing_reads/*fastq
@@ -77,14 +81,20 @@ Options:
 Composition profile is the vector representation of contigs and we use kmer (k=4 in the example) to generate this information. Users can keep the contigs longer than contig_length_threshold, such as 1000, for binning as follows:
 
 ```
-python scripts/gen_kmer.py test_data/final.contigs_f1k.fa 1000 4 
+cd MetaBinner
+cd scripts
+
+python gen_kmer.py test_data/final.contigs_f1k.fa 1000 4 
 ```
 Here we choose k=4. By default we usually keep contigs longer than 1000, you can specify a different number. The kmer_file will be generated in the /path/to/contig_file. 
 
 And the users can run the following command to keep the contigs longer than 1000bp for binning.
 
 ```
-python scripts/Filter_tooshort.py test_data/final.contigs_f1k.fa 1000
+cd MetaBinner
+cd scripts
+
+python Filter_tooshort.py test_data/final.contigs_f1k.fa 1000
 ```
 
 

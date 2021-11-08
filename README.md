@@ -4,7 +4,7 @@ GitHub repository for the manuscript "MetaBinner: a high-performance and stand-a
 MetaBinner consists of two modules: 1) “Component module” includes steps 1-4, developed for generating high-quality, diverse component binning results; and 2) “Ensemble module” includes step 5, developed for recovering individual genomes from the component binning results. 
 
 ![image](https://github.com/ziyewang/MetaBinner/blob/master/figures/framework0613.png {height="50%" width="50%"})
-<img src="https://github.com/ziyewang/MetaBinner/blob/master/figures/framework0613.png" width="250"/>
+<img src="https://github.com/ziyewang/MetaBinner/blob/master/figures/framework0613.png" width="500"/>
 ## <a name="started"></a>Getting Started
 
 ### <a name="docker"></a>Install MetaBinner via bioconda

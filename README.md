@@ -46,7 +46,7 @@ The coverage profiles of the contigs for the results in the manuscript were obta
 
 If users have obtained the coverage (depth) file generated for MaxBin (mb2_master_depth.txt) using MetaWRAP, they can run the following command to generate the input coverage file for MetaBinner:
 ```sh
-cat mb2_master_depth.txt | cut -f -1,4- > ${out}/coverage_profile.tsv
+cat mb2_master_depth.txt | cut -f -1,4- > coverage_profile.tsv
 ```
 or remove the contigs no longer than 1000bp like this:
 ```sh
@@ -54,7 +54,7 @@ cat mb2_master_depth.txt | awk '{if ($2>1000) print $0 }' | cut -f -1,4- > cover
 
 ```
 
-If users would like to generate coverage from sequencing reads directly, then can run the script slightly modified from the "binning.sh" of MetaWRAP. The script support different types of sequencing reads, and the defalut type is "paired" ([readsX_1.fastq readsX_2.fastq ...]). If MetaBinner is installed via bioconda, users can obtain path_to_MetaBinner via running this command: $(dirname $(which run_metabinner.sh))
+To generate coverage from sequencing reads directly, run the following script slightly modified from the "binning.sh" of MetaWRAP. The script support different types of sequencing reads, and the defalut type is "paired" ([readsX_1.fastq readsX_2.fastq ...]). If MetaBinner is installed via bioconda, users can obtain path_to_MetaBinner via running this command: $(dirname $(which run_metabinner.sh))
 
 ```sh
 cd path_to_MetaBinner
@@ -78,7 +78,7 @@ Options:
 
 ### Composition Profile
 
-Composition profile is the vector representation of contigs and we use kmer (k=4 in the example) to generate this information. Users can keep the contigs longer than contig_length_threshold, such as 1000, for binning as follows:
+Composition profile is the vector representation of contigs and we use kmer (k=4 in the example) to generate this information. To generate the composition profile and keep the contigs longer than contig_length_threshold, such as 1000, for binning, run the script as follows:
 
 ```
 cd path_to_MetaBinner

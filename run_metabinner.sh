@@ -7,20 +7,18 @@
 ##############################################################################################################################################################
 
 help_message () {
-  echo "Usage: bash run_metabinner.sh -a ${contig_file} -o ${output_dir} -d ${coverage_profiles} -k ${kmer_profile} -p ${metabinner_path}"
+  echo "Usage: bash run_metabinner.sh [options] -a contig_file -o output_dir -d coverage_profile -k kmer_profile -p path_to_MetaBinner"
 	echo "Options:"
 	echo ""
-	echo "	-a STR          metagenomic assembly file"
-	echo "	-o STR          output directory"
-	echo "  -d STR          coverage_profile.tsv; The coverage profiles, containing a table where each row correspond
-	                        to a contig, and each column correspond to a sample. All values are separated with tabs."
-	echo "  -k STR          kmer_profile.csv; The composition profiles, containing a table where each row correspond to a contig,
-	                        and each column correspond to the kmer composition of particular kmer. All values are separated with comma."
-	echo "  -p STR          path to metabinner; e.g. /home/wzy/MetaBinner"
-	echo "	-t INT          number of threads (default=10)"
+	echo "  -a STR          metagenomic assembly file"
+	echo "  -o STR          output directory"
+	echo "  -d STR          coverage_profile.tsv; The coverage profiles, containing a table where each row correspond to a contig, and each column correspond to a sample. All values are separated with tabs."
+	echo "  -k STR          kmer_profile.csv; The composition profiles, containing a table where each row correspond to a contig, and each column correspond to the kmer composition of particular kmer. All values are separated with comma."
+	echo "  -p STR          path to MetaBinner; e.g. /home/wzy/MetaBinner"
+	echo "  -t INT          number of threads (default=1)"
 	echo "";}
 
-num_threads=10
+num_threads=1
 
 while getopts a:o:d:k:p:t: OPT; do
  case ${OPT} in

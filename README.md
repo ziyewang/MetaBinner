@@ -1,6 +1,12 @@
 # MetaBinner
 GitHub repository for the manuscript "MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities"
 
+MetaBinner consists of two modules: 1) “Component module” includes steps 1-4, developed for generating high-quality, diverse component binning results; and 2) “Ensemble module” includes step 5, developed for recovering individual genomes from the component binning results. 
+
+<p align="center">
+<img src="https://github.com/ziyewang/MetaBinner/blob/master/figures/framework0613.png" width="550"/>
+</p>
+
 ## <a name="started"></a>Getting Started
 
 ### <a name="docker"></a>Install MetaBinner via bioconda
@@ -40,7 +46,7 @@ The coverage profiles of the contigs for the results in the manuscript were obta
 
 If users have obtained the coverage (depth) file generated for MaxBin (mb2_master_depth.txt) using MetaWRAP, they can run the following command to generate the input coverage file for MetaBinner:
 ```sh
-cat mb2_master_depth.txt | cut -f -1,4- > ${out}/coverage_profile.tsv
+cat mb2_master_depth.txt | cut -f -1,4- > coverage_profile.tsv
 ```
 or remove the contigs no longer than 1000bp like this:
 ```sh
@@ -48,8 +54,12 @@ cat mb2_master_depth.txt | awk '{if ($2>1000) print $0 }' | cut -f -1,4- > cover
 
 ```
 
-If users would like to generate coverage from sequencing reads directly, then can run the script slightly modified from the "binning.sh" of MetaWRAP. The script support different types of sequencing reads, and the defalut type is "paired" ([readsX_1.fastq readsX_2.fastq ...]).
-```
+To generate coverage from sequencing reads directly, run the following script slightly modified from the "binning.sh" of MetaWRAP. The script support different types of sequencing reads, and the defalut type is "paired" ([readsX_1.fastq readsX_2.fastq ...]). If MetaBinner is installed via bioconda, users can obtain path_to_MetaBinner via running this command: $(dirname $(which run_metabinner.sh))
+
+```sh
+cd path_to_MetaBinner
+cd scripts
+
 bash gen_coverage_file.sh -a contig_file \
 -o output_dir_of_coveragefile \
 path_to_sequencing_reads/*fastq
@@ -68,17 +78,23 @@ Options:
 
 ### Composition Profile
 
-Composition profile is the vector representation of contigs and we use kmer (k=4 in the example) to generate this information. Users can keep the contigs longer than contig_length_threshold, such as 1000, for binning as follows:
+Composition profile is the vector representation of contigs and we use kmer (k=4 in the example) to generate this information. To generate the composition profile and keep the contigs longer than contig_length_threshold, such as 1000, for binning, run the script as follows:
 
 ```
-python scripts/gen_kmer.py test_data/final.contigs_f1k.fa 1000 4 
+cd path_to_MetaBinner
+cd scripts
+
+python gen_kmer.py test_data/final.contigs_f1k.fa 1000 4 
 ```
 Here we choose k=4. By default we usually keep contigs longer than 1000, you can specify a different number. The kmer_file will be generated in the /path/to/contig_file. 
 
 And the users can run the following command to keep the contigs longer than 1000bp for binning.
 
 ```
-python scripts/Filter_tooshort.py test_data/final.contigs_f1k.fa 1000
+cd path_to_MetaBinner
+cd scripts
+
+python Filter_tooshort.py test_data/final.contigs_f1k.fa 1000
 ```
 
 
@@ -88,7 +104,7 @@ Test data is available at https://drive.google.com/file/d/1a-IOOpklXQr_C4sgNxjsx
 
 #path to MetaBinner
 metabinner_path=/home/wzy/MetaBinner
-Note: If users intall metabinner via bioconda, they can set metabinner_path as follows: metabinner_path=$(dirname $(which run_metabinner.sh))
+Note: If users intall MetaBinner via bioconda, they can set metabinner_path as follows: metabinner_path=$(dirname $(which run_metabinner.sh))
 
 ##test data
 #path to the input files for MetaBinner and the output dir:

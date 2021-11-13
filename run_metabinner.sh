@@ -7,6 +7,7 @@
 ##############################################################################################################################################################
 
 help_message () {
+  echo "Usage: run_metabinner.sh -a ${contig_file} -o ${output_dir} -d ${coverage_profiles} -k ${kmer_profile} -p ${metabinner_path}"
 	echo "Options:"
 	echo ""
 	echo "	-a STR          metagenomic assembly file"

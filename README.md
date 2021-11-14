@@ -35,18 +35,6 @@ conda env create -f metabinner_env.yaml
 conda activate metabinner_env
 ```
 
-### <a name="docker"></a>Install checkM database:
-
-CheckM relies on a number of precalculated data files which can be downloaded from https://data.ace.uq.edu.au/public/CheckM_databases/. (More details are available at https://github.com/Ecogenomics/CheckM/wiki/Installation#how-to-install-checkm):
-
-```sh
-mkdir <checkm_data_dir>
-cd <checkm_data_dir>
-wget https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz
-tar xzf checkm_data_2015_01_16.tar.gz 
-checkm data setRoot .
-```
-
 ## <a name="preprocessing"></a>Preprocessing
 
 The preprocessing steps aim to generate coverage profile and composition profile as input to our program.

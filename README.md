@@ -1,7 +1,7 @@
 # MetaBinner
 GitHub repository for the manuscript "MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities"
 
-MetaBinner consists of two modules: 1) “Component module” includes steps 1-4, developed for generating high-quality, diverse component binning results; and 2) “Ensemble module” includes step 5, developed for recovering individual genomes from the component binning results. 
+MetaBinner consists of two modules: 1) “Component module” includes steps 1-4, developed for generating high-quality, diverse component binning results; and 2) “Ensemble module” includes step 5, developed for recovering individual genomes from the component binning results. MetaBinner is an ensemble binning method, but it does not need the outputs of other individual binners. Instead, MetaBinner generates multiple high-quality component binning results based on the proposed “partial seed” method, for further integration. Please see our manuscript for the details.
 
 <p align="center">
 <img src="https://github.com/ziyewang/MetaBinner/blob/master/figures/framework.png" width="550"/>
@@ -133,19 +133,23 @@ Options:
 Please feel free to send bug reports or questions to
 Ziye Wang: zwang17@fudan.edu.cn and Prof. Shanfeng Zhu: zhusf@fudan.edu.cn
 
+## <a name="cami"></a>About CAMI II Challenge
+We are glad that overall Metabinner achieve top performance on the CAMI II Challenge. Please refer to Meyer, F., et al[1] for the results of CAMI II Challenge.
+
 ## <a name="References"></a>References
+[1] Meyer, F., Fritz, A., Deng, ZL. et al. Critical Assessment of Metagenome Interpretation: the second round of challenges. Nat Methods (2022). https://doi.org/10.1038/s41592-022-01431-4
 
-[1] Lu, Yang Young, et al. "COCACOLA: binning metagenomic contigs using sequence COmposition, read CoverAge, CO-alignment and paired-end read LinkAge." Bioinformatics 33.6 (2017): 791-798.
+[2] Lu, Yang Young, et al. "COCACOLA: binning metagenomic contigs using sequence COmposition, read CoverAge, CO-alignment and paired-end read LinkAge." Bioinformatics 33.6 (2017): 791-798.
 
-[2] https://github.com/dparks1134/UniteM.
+[3] https://github.com/dparks1134/UniteM.
 
-[3] Parks, Donovan H., et al. "CheckM: assessing the quality of microbial genomes recovered from isolates, single cells, and metagenomes." Genome research 25.7 (2015): 1043-1055.
+[4] Parks, Donovan H., et al. "CheckM: assessing the quality of microbial genomes recovered from isolates, single cells, and metagenomes." Genome research 25.7 (2015): 1043-1055.
 
-[4] Christian M. K. Sieber, Alexander J. Probst., et al. (2018). "Recovery of genomes from metagenomes via a dereplication, aggregation and scoring strategy". Nature Microbiology. https://doi.org/10.1038/s41564-018-0171-1.
+[5] Christian M. K. Sieber, Alexander J. Probst., et al. (2018). "Recovery of genomes from metagenomes via a dereplication, aggregation and scoring strategy". Nature Microbiology. https://doi.org/10.1038/s41564-018-0171-1.
 
-[5] Uritskiy, Gherman V., Jocelyne DiRuggiero, and James Taylor. "MetaWRAP—a flexible pipeline for genome-resolved metagenomic data analysis." Microbiome 6.1 (2018): 1-13.
+[6] Uritskiy, Gherman V., Jocelyne DiRuggiero, and James Taylor. "MetaWRAP—a flexible pipeline for genome-resolved metagenomic data analysis." Microbiome 6.1 (2018): 1-13.
 
-[6] Meyer, Fernando, et al. "Critical Assessment of Metagenome Interpretation-the second round of challenges." bioRxiv (2021).
+[7] Meyer, Fernando, et al. "Critical Assessment of Metagenome Interpretation-the second round of challenges." bioRxiv (2021).
 
 ## <a name="Citation"></a>Citation
 

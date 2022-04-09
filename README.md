@@ -1,5 +1,5 @@
 # MetaBinner
-GitHub repository for the manuscript "MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities"
+GitHub repository for the manuscript "MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities". We are glad that overall Metabinner achieve top performance on the CAMI II Challenge. Please refer to Meyer, F., et al[1] for the results of CAMI II Challenge.
 
 MetaBinner consists of two modules: 1) “Component module” includes steps 1-4, developed for generating high-quality, diverse component binning results; and 2) “Ensemble module” includes step 5, developed for recovering individual genomes from the component binning results. MetaBinner is an ensemble binning method, but it does not need the outputs of other individual binners. Instead, MetaBinner generates multiple high-quality component binning results based on the proposed “partial seed” method, for further integration. Please see our manuscript for the details.
 
@@ -133,8 +133,6 @@ Options:
 Please feel free to send bug reports or questions to
 Ziye Wang: zwang17@fudan.edu.cn and Prof. Shanfeng Zhu: zhusf@fudan.edu.cn
 
-## <a name="cami"></a>About CAMI II Challenge
-We are glad that overall Metabinner achieve top performance on the CAMI II Challenge. Please refer to Meyer, F., et al[1] for the results of CAMI II Challenge.
 
 ## <a name="References"></a>References
 [1] Meyer, F., Fritz, A., Deng, ZL. et al. Critical Assessment of Metagenome Interpretation: the second round of challenges. Nat Methods (2022). https://doi.org/10.1038/s41592-022-01431-4

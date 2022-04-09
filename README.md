@@ -147,8 +147,6 @@ Ziye Wang: zwang17@fudan.edu.cn and Prof. Shanfeng Zhu: zhusf@fudan.edu.cn
 
 [6] Uritskiy, Gherman V., Jocelyne DiRuggiero, and James Taylor. "MetaWRAP—a flexible pipeline for genome-resolved metagenomic data analysis." Microbiome 6.1 (2018): 1-13.
 
-[7] Meyer, Fernando, et al. "Critical Assessment of Metagenome Interpretation-the second round of challenges." bioRxiv (2021).
-
 ## <a name="Citation"></a>Citation
 
 Wang, Z., Huang, P., You, R., Sun, F., & Zhu, S. (2021). MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities. bioRxiv. https://doi.org/10.1101/2021.07.25.453671

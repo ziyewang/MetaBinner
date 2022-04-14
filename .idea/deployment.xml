@@ -2,6 +2,13 @@
 <project version="4">
   <component name="PublishConfigData" serverName="wzy@10.176.64.2" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
+      <paths name="wangzy@10.158.237.12">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/wangzy/code/my_github/MetaBinner" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="wzy@10.176.64.2">
         <serverdata>
           <mappings>

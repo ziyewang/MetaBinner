@@ -150,8 +150,8 @@ def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
     for k in range(candK, maxK, stepK):
         if k < len(X_mat):
             kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
-            kmeans.fit(np.log(X_mat), sample_weight=len_weight)
-            silVal = silhouette(np.log(X_mat), kmeans.cluster_centers_, kmeans.labels_, len_weight)
+            kmeans.fit(X_mat, sample_weight=len_weight)
+            silVal = silhouette(X_mat, kmeans.cluster_centers_, kmeans.labels_, len_weight)
             logger.info("k:" + str(k) + "\tsilhouette:" + str(silVal) + "\telapsed time:" + str(time.time() - t))
             t = time.time()
 
@@ -167,8 +167,8 @@ def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
     for k in range(candK, maxK, stepK):
         if k < len(X_mat):
             kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
-            kmeans.fit(np.log(X_mat), sample_weight=len_weight)
-            silVal_2nd = silhouette(np.log(X_mat), kmeans.cluster_centers_, kmeans.labels_, len_weight)
+            kmeans.fit(X_mat, sample_weight=len_weight)
+            silVal_2nd = silhouette(X_mat, kmeans.cluster_centers_, kmeans.labels_, len_weight)
             logger.info("k:" + str(k) + "\tsilhouette:" + str(silVal_2nd) + "\telapsed time:" + str(time.time() - t))
             t = time.time()
             if silVal_2nd > bestSilVal_2nd:

@@ -22,6 +22,8 @@ from Bio import SeqIO
 import scipy.sparse as sp
 from sklearn.cluster.k_means_ import euclidean_distances, stable_cumsum, KMeans, check_random_state, row_norms
 
+from scipy.sparse import csc_matrix
+
 logger = logging.getLogger('Metabinner v1.4')
 
 logger.setLevel(logging.INFO)
@@ -429,11 +431,26 @@ if __name__ == '__main__':
     for seq_id in namelist:
         length_weight.append(lengths[seq_id])
 
+    dataset_scale = args.dataset_scale
+    if dataset_scale=='large':
+        X_t = np.log(X_t)
+        X_t[np.abs(X_t)<1e-10]=0
+        X_t = csc_matrix(X_t)
+        X_cov = np.log(X_cov)
+        X_cov[np.abs(X_cov)<1e-10]=0
+        X_cov = csc_matrix(X_cov)
+        X_com = np.log(X_com)
+        X_com[np.abs(X_com)<1e-10]=0
+        X_com = csc_matrix(X_com)
+    else:
+        X_t = np.log(X_t)
+        X_cov = np.log(X_cov)
+        X_com = np.log(X_com)
+
     # set k0 using the large seed number from the two single-copy marker sets
     if args.estimated_k:
         bin_number = args.estimated_k
     else:
-        dataset_scale = args.dataset_scale
         # candK = max(marker1_3quarter_seed_num, bacar_marker_3quarter_seed_num) + 1
         candK = bacar_marker_3quarter_seed_num + 1
         logger.info("start estimate_bin_number")
@@ -450,41 +467,43 @@ if __name__ == '__main__':
         # prefix shows the feature for binning
         # X_t
 
-    my_kmeans(np.log(X_t), namelist, bin_number, bacar_marker_1quarter_seed_num, length_weight, output,
+
+
+    my_kmeans(X_t, namelist, bin_number, bacar_marker_1quarter_seed_num, length_weight, output,
                   contig_length_threshold,
                   prefix='X_t_logtrans', quarter="1quarter", contig_file=contig_file)
 
-    my_kmeans(np.log(X_t), namelist, bin_number, bacar_marker_2quarter_seed_num, length_weight, output,
+    my_kmeans(X_t, namelist, bin_number, bacar_marker_2quarter_seed_num, length_weight, output,
                   contig_length_threshold,
                   prefix='X_t_logtrans', quarter="2quarter", contig_file=contig_file)
 
-    my_kmeans(np.log(X_t), namelist, bin_number, bacar_marker_3quarter_seed_num, length_weight, output,
+    my_kmeans(X_t, namelist, bin_number, bacar_marker_3quarter_seed_num, length_weight, output,
                   contig_length_threshold,
                   prefix='X_t_logtrans', quarter="3quarter", contig_file=contig_file)
 
     # X_com
-    my_kmeans(np.log(X_com), namelist, bin_number, bacar_marker_1quarter_seed_num, length_weight, output,
+    my_kmeans(X_com, namelist, bin_number, bacar_marker_1quarter_seed_num, length_weight, output,
                   contig_length_threshold,
                   prefix='X_com_logtrans', quarter="1quarter", contig_file=contig_file)
 
-    my_kmeans(np.log(X_com), namelist, bin_number, bacar_marker_2quarter_seed_num, length_weight, output,
+    my_kmeans(X_com, namelist, bin_number, bacar_marker_2quarter_seed_num, length_weight, output,
                   contig_length_threshold,
                   prefix='X_com_logtrans', quarter="2quarter", contig_file=contig_file)
 
-    my_kmeans(np.log(X_com), namelist, bin_number, bacar_marker_3quarter_seed_num, length_weight, output,
+    my_kmeans(X_com, namelist, bin_number, bacar_marker_3quarter_seed_num, length_weight, output,
                   contig_length_threshold,
                   prefix='X_com_logtrans', quarter="3quarter", contig_file=contig_file)
 
     # X_cov
     #if len(X_cov[0]) > 5:
-    my_kmeans(np.log(X_cov), namelist, bin_number, bacar_marker_1quarter_seed_num,
+    my_kmeans(X_cov, namelist, bin_number, bacar_marker_1quarter_seed_num,
                   length_weight, output, contig_length_threshold,
                   prefix='X_cov_logtrans', quarter="1quarter", contig_file=contig_file)
 
-    my_kmeans(np.log(X_cov), namelist, bin_number, bacar_marker_2quarter_seed_num,
+    my_kmeans(X_cov, namelist, bin_number, bacar_marker_2quarter_seed_num,
                   length_weight, output, contig_length_threshold,
                   prefix='X_cov_logtrans', quarter="2quarter", contig_file=contig_file)
 
-    my_kmeans(np.log(X_cov), namelist, bin_number, bacar_marker_3quarter_seed_num,
+    my_kmeans(X_cov, namelist, bin_number, bacar_marker_3quarter_seed_num,
                   length_weight, output, contig_length_threshold,
                   prefix='X_cov_logtrans', quarter="3quarter", contig_file=contig_file)

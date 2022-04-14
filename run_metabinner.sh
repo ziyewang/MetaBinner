@@ -16,11 +16,13 @@ help_message () {
 	echo "  -k STR          kmer_profile.csv; The composition profiles, containing a table where each row correspond to a contig, and each column correspond to the kmer composition of particular kmer. All values are separated with comma."
 	echo "  -p STR          path to MetaBinner; e.g. /home/wzy/MetaBinner"
 	echo "  -t INT          number of threads (default=1)"
+	echo "  -s STR          Dataset scale; eg. small,large,huge"
 	echo "";}
 
 num_threads=1
+dataset_scale="large"
 
-while getopts a:o:d:k:p:t: OPT; do
+while getopts a:o:d:k:p:t:s: OPT; do
  case ${OPT} in
   a) contig_file=${OPTARG}
     ;;
@@ -33,6 +35,8 @@ while getopts a:o:d:k:p:t: OPT; do
   p) metabinner_path=${OPTARG}
     ;;
   t) num_threads=${OPTARG}
+    ;;
+  s) dataset_scale=${OPTARG}
     ;;
   \?)
 #    printf "[Usage] `date '+%F %T'` -i <INPUT_FILE> -o <OUTPUT_DIR> -o <P
@@ -64,7 +68,7 @@ time ./component_binning.py \
 --composition_profiles ${kmer_profile} \
 --output ${output_dir}/metabinner_res/result.tsv \
 --log ${output_dir}/metabinner_res/result.log \
---threads ${num_threads}
+--threads ${num_threads} --dataset_scale ${dataset_scale}
 
 if [[ $? -ne 0 ]] ; then echo "Something went wrong with generating component binning results. Exiting.";exit 1; fi
 

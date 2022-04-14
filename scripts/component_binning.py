@@ -20,7 +20,7 @@ import argparse
 
 from Bio import SeqIO
 import scipy.sparse as sp
-from sklearn.cluster.k_means_ import euclidean_distances, stable_cumsum, KMeans, check_random_state, row_norms
+from sklearn.cluster.k_means_ import euclidean_distances, stable_cumsum, KMeans, check_random_state, row_norms, MiniBatchKMeans
 
 from scipy.sparse import csc_matrix
 
@@ -150,10 +150,13 @@ def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
     bestSilVal = 0
     t = time.time()
     for k in range(candK, maxK, stepK):
-        if k < len(X_mat):
-            kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
+        if k < len(len_weight):
+            if dataset_scale=='huge':
+                kmeans = MiniBatchKMeans(n_clusters=k, random_state=7, n_init=30)
+            else:
+                kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
             kmeans.fit(X_mat, sample_weight=len_weight)
-            silVal = silhouette(X_mat, kmeans.cluster_centers_, kmeans.labels_, len_weight)
+            silVal = silhouette(csc_matrix(X_mat).toarray(), kmeans.cluster_centers_, kmeans.labels_, len_weight)
             logger.info("k:" + str(k) + "\tsilhouette:" + str(silVal) + "\telapsed time:" + str(time.time() - t))
             t = time.time()
 
@@ -167,10 +170,13 @@ def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
     candK = bestK + 2 * stepK
     bestSilVal_2nd = 0
     for k in range(candK, maxK, stepK):
-        if k < len(X_mat):
-            kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
+        if k < len(len_weight):
+            if dataset_scale=='huge':
+                kmeans = MiniBatchKMeans(n_clusters=k, random_state=7, n_init=30)
+            else:
+                kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
             kmeans.fit(X_mat, sample_weight=len_weight)
-            silVal_2nd = silhouette(X_mat, kmeans.cluster_centers_, kmeans.labels_, len_weight)
+            silVal_2nd = silhouette(csc_matrix(X_mat).toarray(), kmeans.cluster_centers_, kmeans.labels_, len_weight)
             logger.info("k:" + str(k) + "\tsilhouette:" + str(silVal_2nd) + "\telapsed time:" + str(time.time() - t))
             t = time.time()
             if silVal_2nd > bestSilVal_2nd:
@@ -362,7 +368,7 @@ def seed_kmeans_combo(seed_idx, output, X_mat, bin_number, prefix, length_weight
 
 
 def my_kmeans(X_mat, namelist, bin_number, bacar_marker_seed_num, length_weight, output, contig_length_threshold,
-              prefix='X_t_notrans', quarter="3quarter", contig_file=None):
+              prefix='X_t_notrans', quarter="3quarter", contig_file=None,dataset_scale='large'):
     if bacar_marker_seed_num > 0:
         seed_bacar_marker_url = contig_file + ".bacar_marker" + "." + quarter + "_lencutoff_" + str(
             contig_length_threshold) + ".seed"
@@ -372,7 +378,10 @@ def my_kmeans(X_mat, namelist, bin_number, bacar_marker_seed_num, length_weight,
     logger.info("run kmeans length weight with:\t" + prefix)
     output_temp = os.path.dirname(output) + '/intermediate_result' + '/kmeans_length_weight_' + prefix + '_result.tsv'
     if not (os.path.exists(output_temp)):
-        km = KMeans(n_clusters=bin_number, init='k-means++', n_jobs=-1, n_init=30, random_state=7)
+        if dataset_scale == 'huge':
+            km = MiniBatchKMeans(n_clusters=bin_number, random_state=7, n_init=30)
+        else:
+            km = KMeans(n_clusters=bin_number, init='k-means++', n_jobs=-1, n_init=30, random_state=7)
         km.fit(X_mat, sample_weight=length_weight)  # add log transform
         idx = km.labels_
         save_result(idx, output_temp, namelist)
@@ -432,7 +441,9 @@ if __name__ == '__main__':
         length_weight.append(lengths[seq_id])
 
     dataset_scale = args.dataset_scale
-    if dataset_scale=='large':
+    logger.info("Dataset scale:\t" + dataset_scale)
+
+    if dataset_scale == 'huge':
         X_t = np.log(X_t)
         X_t[np.abs(X_t)<1e-10]=0
         X_t = csc_matrix(X_t)
@@ -471,39 +482,39 @@ if __name__ == '__main__':
 
     my_kmeans(X_t, namelist, bin_number, bacar_marker_1quarter_seed_num, length_weight, output,
                   contig_length_threshold,
-                  prefix='X_t_logtrans', quarter="1quarter", contig_file=contig_file)
+                  prefix='X_t_logtrans', quarter="1quarter", contig_file=contig_file,dataset_scale=dataset_scale)
 
     my_kmeans(X_t, namelist, bin_number, bacar_marker_2quarter_seed_num, length_weight, output,
                   contig_length_threshold,
-                  prefix='X_t_logtrans', quarter="2quarter", contig_file=contig_file)
+                  prefix='X_t_logtrans', quarter="2quarter", contig_file=contig_file,dataset_scale=dataset_scale)
 
     my_kmeans(X_t, namelist, bin_number, bacar_marker_3quarter_seed_num, length_weight, output,
                   contig_length_threshold,
-                  prefix='X_t_logtrans', quarter="3quarter", contig_file=contig_file)
+                  prefix='X_t_logtrans', quarter="3quarter", contig_file=contig_file, dataset_scale=dataset_scale)
 
     # X_com
     my_kmeans(X_com, namelist, bin_number, bacar_marker_1quarter_seed_num, length_weight, output,
                   contig_length_threshold,
-                  prefix='X_com_logtrans', quarter="1quarter", contig_file=contig_file)
+                  prefix='X_com_logtrans', quarter="1quarter", contig_file=contig_file, dataset_scale=dataset_scale)
 
     my_kmeans(X_com, namelist, bin_number, bacar_marker_2quarter_seed_num, length_weight, output,
                   contig_length_threshold,
-                  prefix='X_com_logtrans', quarter="2quarter", contig_file=contig_file)
+                  prefix='X_com_logtrans', quarter="2quarter", contig_file=contig_file, dataset_scale=dataset_scale)
 
     my_kmeans(X_com, namelist, bin_number, bacar_marker_3quarter_seed_num, length_weight, output,
                   contig_length_threshold,
-                  prefix='X_com_logtrans', quarter="3quarter", contig_file=contig_file)
+                  prefix='X_com_logtrans', quarter="3quarter", contig_file=contig_file, dataset_scale=dataset_scale)
 
     # X_cov
     #if len(X_cov[0]) > 5:
     my_kmeans(X_cov, namelist, bin_number, bacar_marker_1quarter_seed_num,
                   length_weight, output, contig_length_threshold,
-                  prefix='X_cov_logtrans', quarter="1quarter", contig_file=contig_file)
+                  prefix='X_cov_logtrans', quarter="1quarter", contig_file=contig_file, dataset_scale=dataset_scale)
 
     my_kmeans(X_cov, namelist, bin_number, bacar_marker_2quarter_seed_num,
                   length_weight, output, contig_length_threshold,
-                  prefix='X_cov_logtrans', quarter="2quarter", contig_file=contig_file)
+                  prefix='X_cov_logtrans', quarter="2quarter", contig_file=contig_file, dataset_scale=dataset_scale)
 
     my_kmeans(X_cov, namelist, bin_number, bacar_marker_3quarter_seed_num,
                   length_weight, output, contig_length_threshold,
-                  prefix='X_cov_logtrans', quarter="3quarter", contig_file=contig_file)
+                  prefix='X_cov_logtrans', quarter="3quarter", contig_file=contig_file, dataset_scale=dataset_scale)

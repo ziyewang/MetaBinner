@@ -152,7 +152,7 @@ def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
     for k in range(candK, maxK, stepK):
         if k < len(len_weight):
             if dataset_scale=='huge':
-                kmeans = MiniBatchKMeans(n_clusters=k, random_state=7, n_init=30)
+                kmeans = MiniBatchKMeans(n_clusters=k, random_state=7, n_init=30, batch_size=1024)
             else:
                 kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
             kmeans.fit(X_mat, sample_weight=len_weight)
@@ -172,7 +172,7 @@ def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
     for k in range(candK, maxK, stepK):
         if k < len(len_weight):
             if dataset_scale=='huge':
-                kmeans = MiniBatchKMeans(n_clusters=k, random_state=7, n_init=30)
+                kmeans = MiniBatchKMeans(n_clusters=k, random_state=7, n_init=30, batch_size=1024)
             else:
                 kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
             kmeans.fit(X_mat, sample_weight=len_weight)
@@ -379,7 +379,7 @@ def my_kmeans(X_mat, namelist, bin_number, bacar_marker_seed_num, length_weight,
     output_temp = os.path.dirname(output) + '/intermediate_result' + '/kmeans_length_weight_' + prefix + '_result.tsv'
     if not (os.path.exists(output_temp)):
         if dataset_scale == 'huge':
-            km = MiniBatchKMeans(n_clusters=bin_number, random_state=7, n_init=30)
+            km = MiniBatchKMeans(n_clusters=bin_number, random_state=7, n_init=30, batch_size=1024)
         else:
             km = KMeans(n_clusters=bin_number, init='k-means++', n_jobs=-1, n_init=30, random_state=7)
         km.fit(X_mat, sample_weight=length_weight)  # add log transform

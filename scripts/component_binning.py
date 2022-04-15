@@ -156,7 +156,7 @@ def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
             else:
                 kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
             kmeans.fit(X_mat, sample_weight=len_weight)
-            silVal = silhouette(csc_matrix(X_mat).toarray(), kmeans.cluster_centers_, kmeans.labels_, len_weight)
+            silVal = silhouette(X_mat, kmeans.cluster_centers_, kmeans.labels_, len_weight)
             logger.info("k:" + str(k) + "\tsilhouette:" + str(silVal) + "\telapsed time:" + str(time.time() - t))
             t = time.time()
 
@@ -176,7 +176,7 @@ def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
             else:
                 kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
             kmeans.fit(X_mat, sample_weight=len_weight)
-            silVal_2nd = silhouette(csc_matrix(X_mat).toarray(), kmeans.cluster_centers_, kmeans.labels_, len_weight)
+            silVal_2nd = silhouette(X_mat, kmeans.cluster_centers_, kmeans.labels_, len_weight)
             logger.info("k:" + str(k) + "\tsilhouette:" + str(silVal_2nd) + "\telapsed time:" + str(time.time() - t))
             t = time.time()
             if silVal_2nd > bestSilVal_2nd:
@@ -354,13 +354,17 @@ def partial_seed_init(X, n_clusters, random_state, seed_idx, n_local_trials=None
 
 
 def seed_kmeans_combo(seed_idx, output, X_mat, bin_number, prefix, length_weight, marker_name="marker1",
-                      quarter="3quarter"):
+                      quarter="3quarter",dataset_scale="large"):
     # run partial seed kmeans marker1_seed length weight
     logger.info("run partial seed kmeans " + marker_name + " seed length weight with:\t" + quarter + '_' + prefix)
     output_temp = os.path.dirname(
         output) + '/intermediate_result' + '/partial_seed_kmeans_' + marker_name + '_seed_length_weight_' + quarter + '_' + prefix + '_result.tsv'
     if not (os.path.exists(output_temp)):
-        km = KMeans(n_clusters=bin_number, n_jobs=-1, random_state=7, n_init=30,
+        if dataset_scale == "huge":
+            km = KMeans(n_clusters=bin_number, n_jobs=-1, random_state=7, n_init=30, algorithm="full",
+                        init=functools.partial(partial_seed_init, seed_idx=seed_idx))
+        else:
+            km = KMeans(n_clusters=bin_number, n_jobs=-1, random_state=7, n_init=30,
                     init=functools.partial(partial_seed_init, seed_idx=seed_idx))
         km.fit(X_mat, sample_weight=length_weight)
         idx = km.labels_
@@ -388,7 +392,7 @@ def my_kmeans(X_mat, namelist, bin_number, bacar_marker_seed_num, length_weight,
 
     if bacar_marker_seed_num > 0:
         seed_kmeans_combo(seed_bacar_marker_idx, output, X_mat, bin_number, prefix, length_weight,
-                          marker_name="bacar_marker", quarter=quarter)
+                          marker_name="bacar_marker", quarter=quarter,dataset_scale=dataset_scale)
 
 
 if __name__ == '__main__':
@@ -443,20 +447,20 @@ if __name__ == '__main__':
     dataset_scale = args.dataset_scale
     logger.info("Dataset scale:\t" + dataset_scale)
 
-    if dataset_scale == 'huge':
-        X_t = np.log(X_t)
-        X_t[np.abs(X_t)<1e-10]=0
-        X_t = csc_matrix(X_t)
-        X_cov = np.log(X_cov)
-        X_cov[np.abs(X_cov)<1e-10]=0
-        X_cov = csc_matrix(X_cov)
-        X_com = np.log(X_com)
-        X_com[np.abs(X_com)<1e-10]=0
-        X_com = csc_matrix(X_com)
-    else:
-        X_t = np.log(X_t)
-        X_cov = np.log(X_cov)
-        X_com = np.log(X_com)
+    # if dataset_scale == 'huge':
+    #     X_t = np.log(X_t)
+    #     X_t[np.abs(X_t)<1e-10]=0
+    #     X_t = csc_matrix(X_t)
+    #     X_cov = np.log(X_cov)
+    #     X_cov[np.abs(X_cov)<1e-10]=0
+    #     X_cov = csc_matrix(X_cov)
+    #     X_com = np.log(X_com)
+    #     X_com[np.abs(X_com)<1e-10]=0
+    #     X_com = csc_matrix(X_com)
+    # else:
+    X_t = np.log(X_t)
+    X_cov = np.log(X_cov)
+    X_com = np.log(X_com)
 
     # set k0 using the large seed number from the two single-copy marker sets
     if args.estimated_k:

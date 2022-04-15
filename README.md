@@ -125,7 +125,7 @@ Options:
                             and each column correspond to the kmer composition of particular kmer. All values are separated with comma.
         -p STR          path to MetaBinner; e.g. /home/wzy/MetaBinner
         -t INT          number of threads (default=1)
-        -s STR          Dataset scale; eg. small,large,huge (default="huge"); Users can choose "huge" to run MetaBinner on huge datasets
+        -s STR          Dataset scale; eg. small,large,huge (default:large); Users can choose "huge" to run MetaBinner on huge datasets
                         with lower memory requirements.
 
 #The file "metabinner_result.tsv" in the "${output_dir}/metabinner_res" is the final output.

@@ -25,6 +25,8 @@ help_message () {
 	echo "	-l INT		minimum contig length to bin (default=1000bp)."
 	echo "	--single-end	non-paired reads mode (provide *.fastq files)"
 	echo "	--interleaved	the input read files contain interleaved paired-end reads"
+	echo "	-f STR    Forward read suffix for paired reads (default="_1.fastq")"
+	echo "	-r STR    Reverse read suffix for paired reads (default="_2.fastq")"
 	echo "";}
 
 
@@ -54,6 +56,8 @@ threads=1; mem=4; len=1000; out=false; ASSEMBLY=false
 # long options defaults
 read_type=paired
 
+F_reads_suffix=_1.fastq
+R_reads_suffix=_2.fastq
 
 # load in params
 
@@ -61,18 +65,23 @@ read_type=paired
 while true; do
         case "$1" in
                 -t) threads=$2; shift 2;;
-		-m) mem=$2; shift 2;;
+		            -m) mem=$2; shift 2;;
                 -o) out=$2; shift 2;;
                 -a) ASSEMBLY=$2; shift 2;;
-		-l) len=$2; shift 2;;
+		            -l) len=$2; shift 2;;
+		            -f) F_reads_suffix=$2; shift 2;;
+		            -r) R_reads_suffix=$2; shift 2;;
                 -h | --help) help_message; exit 1; shift 1;;
-		--single-end) read_type=single; shift 1;;
-		--interleaved) read_type=interleaved; shift 1;;
+		            --single-end) read_type=single; shift 1;;
+		            --interleaved) read_type=interleaved; shift 1;;
                 --) help_message; exit 1; shift; break ;;
                 *) break;;
         esac
 done
 
+#echo ${F_reads_suffix}
+#echo ${R_reads_suffix}
+#exit 1
 ########################################################################################################
 ########################           MAKING SURE EVERYTHING IS SET UP             ########################
 ########################################################################################################
@@ -93,11 +102,11 @@ if [ $read_type = paired ]; then
 	# check for at least one pair of read fastq files:
 	F="no"; R="no"
 	for num in "$@"; do
-		if [[ $num == *"_1.fastq" ]]; then F="yes"; fi
-		if [[ $num == *"_2.fastq" ]]; then R="yes"; fi
+		if [[ $num == *${F_reads_suffix} ]]; then F="yes"; fi
+		if [[ $num == *${R_reads_suffix} ]]; then R="yes"; fi
 	done
 	if [ $F = "no" ] || [ $R = "no" ]; then
-		comm "Unable to find proper fastq read pair in the format *_1.fastq and *_2.fastq"
+		comm "Unable to find proper fastq read pair in the format *${F_reads_suffix} and *${R_reads_suffix}"
 		help_message; exit 1
 	fi
 else
@@ -114,8 +123,8 @@ fi
 
 if [ $read_type = paired ]; then
 	#determine number of fastq read files provided:
-	num_of_F_read_files=$(for I in "$@"; do echo $I | grep _1.fastq; done | wc -l)
-	num_of_R_read_files=$(for I in "$@"; do echo $I | grep _2.fastq; done | wc -l)
+	num_of_F_read_files=$(for I in "$@"; do echo $I | grep ${F_reads_suffix}; done | wc -l)
+	num_of_R_read_files=$(for I in "$@"; do echo $I | grep ${R_reads_suffix}; done | wc -l)
 
 	comm "$num_of_F_read_files forward and $num_of_R_read_files reverse read files detected"
 	if [ ! $num_of_F_read_files == $num_of_R_read_files ]; then error "Number of F and R reads must be the same!"; fi
@@ -170,14 +179,14 @@ fi
 for num in "$@"; do
 	# paired end reads
 	if [ $read_type = paired ]; then
-		if [[ $num == *"_1.fastq"* ]]; then 
+		if [[ $num == *"${F_reads_suffix}"* ]]; then
 			reads_1=$num
-			reads_2=${num%_*}_2.fastq
+			reads_2=${num%${F_reads_suffix}}${R_reads_suffix}
 			if [ ! -s $reads_1 ]; then error "$reads_1 does not exist. Exiting..."; fi
 			if [ ! -s $reads_2 ]; then error "$reads_2 does not exist. Exiting..."; fi
 	
 			tmp=${reads_1##*/}
-			sample=${tmp%_*}
+			sample=${tmp%${F_reads_suffix}}
 			
 			if [[ ! -f ${out}/work_files/${sample}.bam ]]; then
 				comm "Aligning $reads_1 and $reads_2 back to assembly"
@@ -186,7 +195,7 @@ for num in "$@"; do
 
 				comm "Sorting the $sample alignment file"
 				samtools sort -T ${out}/work_files/tmp-samtools -@ $threads -O BAM -o ${out}/work_files/${sample}.bam ${out}/work_files/${sample}.sam
-				if [[ $? -ne 0 ]]; then error "Something went wrong with sorting the alignments. Exiging..."; fi
+				if [[ $? -ne 0 ]]; then error "Something went wrong with sorting the alignments. Exiting..."; fi
 				rm ${out}/work_files/${sample}.sam
 			else
 				comm "skipping aligning $sample reads to assembly because ${out}/work_files/${sample}.bam already exists."
@@ -214,7 +223,7 @@ for num in "$@"; do
 				
 				comm "Sorting the $sample alignment file"
 				samtools sort -T ${out}/work_files/tmp-samtools -@ $threads -O BAM -o ${out}/work_files/${sample}.bam ${out}/work_files/${sample}.sam
-				if [[ $? -ne 0 ]]; then error "Something went wrong with sorting the alignments. Exiging..."; fi
+				if [[ $? -ne 0 ]]; then error "Something went wrong with sorting the alignments. Exiting..."; fi
 				rm ${out}/work_files/${sample}.sam
 			else
 				comm "skipping aligning $sample reads to assembly because ${out}/work_files/${sample}.bam already exists."
@@ -236,26 +245,7 @@ comm "making contig depth file..."
       ${SOFT}/jgi_summarize_bam_contig_depths --outputDepth ${out}/work_files/mb2_master_depth.txt --noIntraDepthVariance ${out}/work_files/*.bam
       if [[ $? -ne 0 ]]; then error "Something went wrong with making contig depth file. Exiting."; fi
 
-#	#calculate total numper of columns
-#	A=($(head -n 1 ${out}/work_files/mb2_master_depth.txt))
-#	N=${#A[*]}
-#
-#	# split the contig depth file into multiple files
-#	comm "split master contig depth file into individual files for maxbin2 input"
-#	if [ -f ${out}/work_files/mb2_abund_list.txt ]; then rm ${out}/work_files/mb2_abund_list.txt; fi
-#	for i in $(seq 4 $N); do
-#		sample=$(head -n 1 ${out}/work_files/mb2_master_depth.txt | cut -f $i)
-#		echo "processing $sample depth file..."
-#		grep -v totalAvgDepth ${out}/work_files/mb2_master_depth.txt | cut -f 1,$i > ${out}/work_files/mb2_${sample%.*}.txt
-#		if [[ $out == /* ]]; then
-#			echo ${out}/work_files/mb2_${sample%.*}.txt >> ${out}/work_files/mb2_abund_list.txt
-#		else
-#			echo $(pwd)/${out}/work_files/mb2_${sample%.*}.txt >> ${out}/work_files/mb2_abund_list.txt
-#		fi
-#	done
 
-#comm "cleaning up *.bam to save space..."
-#rm ${out}/work_files/*bam
 cat ${out}/work_files/mb2_master_depth.txt | cut -f -1,4- > ${out}/coverage_profile.tsv
 cat ${out}/work_files/mb2_master_depth.txt | awk '{if ($2>1000) print $0 }' | cut -f -1,4- > ${out}/coverage_profile_f1k.tsv
 ########################################################################################################

@@ -72,6 +72,8 @@ Options:
         -l INT          minimum contig length to bin (default=1000bp).
         --single-end    non-paired reads mode (provide *.fastq files)
         --interleaved   the input read files contain interleaved paired-end reads
+        -f              Forward read suffix for paired reads (default="_1.fastq")
+	-r              Reverse read suffix for paired reads (default="_2.fastq")
 
 ```
 

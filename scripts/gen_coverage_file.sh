@@ -19,7 +19,8 @@ help_message () {
 	echo "Options:"
 	echo ""
 	echo "	-a STR    metagenomic assembly file"
-	echo "	-o STR    output directory"
+	echo "	-o STR    output directory (to save the coverage files)"
+	echo "	-b STR    directory for the bam files"
 	echo "	-t INT    number of threads (default=1)"
 	echo "	-m INT		amount of RAM available (default=4)"
 	echo "	-l INT		minimum contig length to bin (default=1000bp)."
@@ -52,7 +53,7 @@ announcement () { ${SOFT}/print_comment.py "$1" "#"; }
 
 
 # default params
-threads=1; mem=4; len=1000; out=false; ASSEMBLY=false
+threads=1; mem=4; len=1000; out=false; ASSEMBLY=false; bout=false
 # long options defaults
 read_type=paired
 
@@ -67,6 +68,7 @@ while true; do
                 -t) threads=$2; shift 2;;
 		            -m) mem=$2; shift 2;;
                 -o) out=$2; shift 2;;
+                -b) bout=$2; shift 2;;
                 -a) ASSEMBLY=$2; shift 2;;
 		            -l) len=$2; shift 2;;
 		            -f) F_reads_suffix=$2; shift 2;;
@@ -95,6 +97,13 @@ fi
 
 #check if the assembly file exists
 if [ ! -s $ASSEMBLY ]; then error "$ASSEMBLY does not exist. Exiting..."; fi
+
+#check if  parameter for bout dir is entered
+if [[ $bout = false ]]; then
+bout=${out}/work_files
+#comm ${bout}
+fi
+
 
 comm "Entered read type: $read_type"
 
@@ -130,12 +139,6 @@ if [ $read_type = paired ]; then
 	if [ ! $num_of_F_read_files == $num_of_R_read_files ]; then error "Number of F and R reads must be the same!"; fi
 fi
 
-#
-## Checks for correctly configures meta-scripts folder
-#if [ ! -s $SOFT/sort_contigs.py ]; then
-#	error "The folder $SOFT doesnt exist. Please make sure config.sh is in the same filder as the mains scripts and all the paths in the config.sh file are correct"
-#fi
-
 
 ########################################################################################################
 ########################                    BEGIN PIPELINE!                     ########################
@@ -154,6 +157,7 @@ else
 fi
 
 if [ ! -d ${out}/work_files ]; then mkdir ${out}/work_files; fi
+if [ ! -d ${bout} ]; then mkdir ${bout}; fi
 
 if [ -f ${out}/work_files/assembly.fa ]; then
 	comm "Looks like the assembly file is already coppied, but will re-transfer just in case to avoid truncation problems."
@@ -188,17 +192,17 @@ for num in "$@"; do
 			tmp=${reads_1##*/}
 			sample=${tmp%${F_reads_suffix}}
 			
-			if [[ ! -f ${out}/work_files/${sample}.bam ]]; then
+			if [[ ! -f ${bout}/${sample}.bam ]]; then
 				comm "Aligning $reads_1 and $reads_2 back to assembly"
-				bwa mem -v 1 -t $threads ${out}/work_files/assembly.fa $reads_1 $reads_2 > ${out}/work_files/${sample}.sam
+				bwa mem -v 1 -t $threads ${out}/work_files/assembly.fa $reads_1 $reads_2 > ${bout}/${sample}.sam
 				if [[ $? -ne 0 ]]; then error "Something went wrong with aligning $reads_1 and $reads_2 reads to the assembly. Exiting"; fi
 
 				comm "Sorting the $sample alignment file"
-				samtools sort -T ${out}/work_files/tmp-samtools -@ $threads -O BAM -o ${out}/work_files/${sample}.bam ${out}/work_files/${sample}.sam
+				samtools sort -T ${out}/work_files/tmp-samtools -@ $threads -O BAM -o ${bout}/${sample}.bam ${bout}/${sample}.sam
 				if [[ $? -ne 0 ]]; then error "Something went wrong with sorting the alignments. Exiting..."; fi
-				rm ${out}/work_files/${sample}.sam
+				rm ${bout}/${sample}.sam
 			else
-				comm "skipping aligning $sample reads to assembly because ${out}/work_files/${sample}.bam already exists."
+				comm "skipping aligning $sample reads to assembly because ${bout}/${sample}.bam already exists."
 			fi
 		fi
 
@@ -209,24 +213,24 @@ for num in "$@"; do
 			if [ ! -s $reads ]; then error "$reads does not exist. Exiting..."; fi
 			tmp=${reads##*/}
 			sample=${tmp%.*}
-			if [[ ! -f ${out}/work_files/${sample}.bam ]]; then
+			if [[ ! -f ${bout}/${sample}.bam ]]; then
 				comm "Aligning $reads back to assembly, and sorting the alignment"
 				if [ $read_type = single ]; then
-					bwa mem -t $threads ${out}/work_files/assembly.fa $reads > ${out}/work_files/${sample}.sam
+					bwa mem -t $threads ${out}/work_files/assembly.fa $reads > ${bout}/${sample}.sam
 					if [[ $? -ne 0 ]]; then error "Something went wrong with aligning the reads to the assembly!"; fi
 				elif [ $read_type = interleaved ]; then
-					bwa mem -v 1 -p -t $threads ${out}/work_files/assembly.fa $reads > ${out}/work_files/${sample}.sam
+					bwa mem -v 1 -p -t $threads ${out}/work_files/assembly.fa $reads > ${bout}/${sample}.sam
 					if [[ $? -ne 0 ]]; then error "Something went wrong with aligning the reads to the assembly!"; fi
 				else
 					error "something from with the read_type (=$read_type)"
 				fi
 				
 				comm "Sorting the $sample alignment file"
-				samtools sort -T ${out}/work_files/tmp-samtools -@ $threads -O BAM -o ${out}/work_files/${sample}.bam ${out}/work_files/${sample}.sam
+				samtools sort -T ${out}/work_files/tmp-samtools -@ $threads -O BAM -o ${bout}/${sample}.bam ${bout}/${sample}.sam
 				if [[ $? -ne 0 ]]; then error "Something went wrong with sorting the alignments. Exiting..."; fi
-				rm ${out}/work_files/${sample}.sam
+				rm ${bout}/${sample}.sam
 			else
-				comm "skipping aligning $sample reads to assembly because ${out}/work_files/${sample}.bam already exists."
+				comm "skipping aligning $sample reads to assembly because ${bout}/${sample}.bam already exists."
 			fi
 		fi
 	fi
@@ -242,7 +246,7 @@ done
 #        announcement "Making contig depth "
 
 comm "making contig depth file..."
-      ${SOFT}/jgi_summarize_bam_contig_depths --outputDepth ${out}/work_files/mb2_master_depth.txt --noIntraDepthVariance ${out}/work_files/*.bam
+      ${SOFT}/jgi_summarize_bam_contig_depths --outputDepth ${out}/work_files/mb2_master_depth.txt --noIntraDepthVariance ${bout}/*.bam
       if [[ $? -ne 0 ]]; then error "Something went wrong with making contig depth file. Exiting."; fi
 
 

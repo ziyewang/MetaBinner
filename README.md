@@ -66,7 +66,8 @@ path_to_sequencing_reads/*fastq
 Options:
 
         -a STR          metagenomic assembly file
-        -o STR          output directory
+        -o STR          output directory (to save the coverage files)
+	-b STR          directory for the bam files (optional)
         -t INT          number of threads (default=1)
         -m INT          amount of RAM available (default=4)
         -l INT          minimum contig length to bin (default=1000bp).

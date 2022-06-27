@@ -20,7 +20,7 @@ import argparse
 
 from Bio import SeqIO
 import scipy.sparse as sp
-from sklearn.cluster.k_means_ import euclidean_distances, stable_cumsum, KMeans, check_random_state, row_norms, MiniBatchKMeans
+from sklearn.cluster._kmeans import euclidean_distances, stable_cumsum, KMeans, check_random_state, row_norms, MiniBatchKMeans
 
 from scipy.sparse import csc_matrix
 

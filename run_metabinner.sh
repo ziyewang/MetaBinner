@@ -252,6 +252,9 @@ binsB=X_cov_logtrans_${Method_name}
 binsC=X_com_logtrans_${Method_name}
 
 
+##### if binsA, binsB and binsC are not empty
+if [ ! "`ls -A ${binsA}`" = "" ] &&  [ ! "`ls -A ${binsB}`" = "" ] && [ ! "`ls -A ${binsC}`" = "" ];then
+
 ${metabinner_path}/scripts/binning_refiner.py -1 ${binsA} -2 ${binsB} -3 ${binsC} -o Refined_ABC > Refined_ABC.out &
 ${metabinner_path}/scripts/binning_refiner.py -1 ${binsA} -2 ${binsB} -o Refined_AB > Refined_AB.out &
 ${metabinner_path}/scripts/binning_refiner.py -1 ${binsA} -2 ${binsC} -o Refined_AC > Refined_AC.out &
@@ -275,6 +278,57 @@ cp -r addrefined3comps_bins_dir.tsv addrefined2and3comps_bins_dir.tsv
 echo -e "Refined_AB\t${path}/${Method_name}/ensemble_3logtrans/Refined_AB/Refined_AB" >> addrefined2and3comps_bins_dir.tsv
 echo -e "Refined_AC\t${path}/${Method_name}/ensemble_3logtrans/Refined_AC/Refined_AC" >> addrefined2and3comps_bins_dir.tsv
 echo -e "Refined_BC\t${path}/${Method_name}/ensemble_3logtrans/Refined_BC/Refined_BC" >> addrefined2and3comps_bins_dir.tsv
+
+fi
+
+##### if binsA and binsB are not empty, binC is empty
+if [ ! "`ls -A ${binsA}`" = "" ] &&  [ ! "`ls -A ${binsB}`" = "" ] && [ "`ls -A ${binsC}`" = "" ];then
+
+${metabinner_path}/scripts/binning_refiner.py -1 ${binsA} -2 ${binsB} -o Refined_AB > Refined_AB.out
+
+if [[ $? -ne 0 ]] ; then echo "Something went wrong with running binning_refiner.py. Exiting.";exit 1; fi
+
+
+#mv Refined_ABC/Refined Refined_ABC/Refined_ABC
+mv Refined_AB/Refined Refined_AB/Refined_AB
+#mv Refined_AC/Refined Refined_AC/Refined_AC
+#mv Refined_BC/Refined Refined_BC/Refined_BC
+
+
+cp -r bins_dir.tsv addrefined3comps_bins_dir.tsv
+#echo -e "Refined_ABC\t${path}/${Method_name}/ensemble_3logtrans/Refined_ABC/Refined_ABC" >> addrefined3comps_bins_dir.tsv
+
+cp -r addrefined3comps_bins_dir.tsv addrefined2and3comps_bins_dir.tsv
+echo -e "Refined_AB\t${path}/${Method_name}/ensemble_3logtrans/Refined_AB/Refined_AB" >> addrefined2and3comps_bins_dir.tsv
+#echo -e "Refined_AC\t${path}/${Method_name}/ensemble_3logtrans/Refined_AC/Refined_AC" >> addrefined2and3comps_bins_dir.tsv
+#echo -e "Refined_BC\t${path}/${Method_name}/ensemble_3logtrans/Refined_BC/Refined_BC" >> addrefined2and3comps_bins_dir.tsv
+
+fi
+
+##### if binsA, binsC not empty, binsB is empty
+if [ ! "`ls -A ${binsA}`" = "" ] &&  [ "`ls -A ${binsB}`" = "" ] && [ ! "`ls -A ${binsC}`" = "" ];then
+
+${metabinner_path}/scripts/binning_refiner.py -1 ${binsA} -2 ${binsC} -o Refined_AC > Refined_AC.out
+
+if [[ $? -ne 0 ]] ; then echo "Something went wrong with running binning_refiner.py. Exiting.";exit 1; fi
+
+mv Refined_AC/Refined Refined_AC/Refined_AC
+
+cp -r bins_dir.tsv addrefined3comps_bins_dir.tsv
+
+cp -r addrefined3comps_bins_dir.tsv addrefined2and3comps_bins_dir.tsv
+echo -e "Refined_AC\t${path}/${Method_name}/ensemble_3logtrans/Refined_AC/Refined_AC" >> addrefined2and3comps_bins_dir.tsv
+
+fi
+
+
+##### if binsA is nor empty, binsB and binC is empty
+if [ ! "`ls -A ${binsA}`" = "" ] &&  [ "`ls -A ${binsB}`" = "" ] && [ "`ls -A ${binsC}`" = "" ];then
+
+cp -r bins_dir.tsv addrefined3comps_bins_dir.tsv
+cp -r addrefined3comps_bins_dir.tsv addrefined2and3comps_bins_dir.tsv
+
+fi
 
 mkdir addrefined2and3comps
 

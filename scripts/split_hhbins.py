@@ -26,6 +26,8 @@ from unitem_markers import Markers
 from metabinner_util import get_bin_extension
 from collections import defaultdict
 
+from component_binning import gen_X
+
 import biolib.seq_io as seq_io
 
 logger = logging.getLogger('Metabinner post process for the component results')
@@ -71,31 +73,31 @@ def arguments():
         sys.exit(0)
     return args
 
-
-def gen_X(com_file, cov_file):
-    covHeader = pd.read_csv(cov_file, sep='\t', nrows=1)
-    covMat = pd.read_csv(cov_file, sep='\t', usecols=range(1, covHeader.shape[1])).values
-    namelist = pd.read_csv(cov_file, sep='\t', usecols=range(1)).values[:, 0]
-    mapObj = dict(zip(namelist, range(len(namelist))))
-
-    compositHeader = pd.read_csv(com_file, sep=',', nrows=1)
-    shuffled_compositMat = pd.read_csv(com_file, sep=',', usecols=range(1, compositHeader.shape[1])).values
-    shuffled_namelist = pd.read_csv(com_file, sep=',', usecols=range(1)).values[:, 0]
-
-    covIdxArr = np.empty(len(mapObj), dtype=np.int)
-    for contigIdx in range(len(shuffled_namelist)):
-        if shuffled_namelist[contigIdx] in mapObj:
-            covIdxArr[mapObj[shuffled_namelist[contigIdx]]] = contigIdx
-    compositMat = shuffled_compositMat[covIdxArr]
-
-    covMat = covMat + 1e-2
-    covMat = covMat / covMat.sum(axis=0)[None, :]
-    if covMat.shape[1] > 1:
-        covMat = covMat / covMat.sum(axis=1)[:, None]
-    compositMat = compositMat + 1
-    compositMat = compositMat / compositMat.sum(axis=1)[:, None]
-    X_t = np.hstack((covMat, compositMat))  # del * 1e1
-    return X_t, namelist, mapObj, covMat, compositMat
+#
+# def gen_X(com_file, cov_file):
+#     covHeader = pd.read_csv(cov_file, sep='\t', nrows=1)
+#     covMat = pd.read_csv(cov_file, sep='\t', usecols=range(1, covHeader.shape[1])).values
+#     namelist = pd.read_csv(cov_file, sep='\t', usecols=range(1)).values[:, 0]
+#     mapObj = dict(zip(namelist, range(len(namelist))))
+#
+#     compositHeader = pd.read_csv(com_file, sep=',', nrows=1)
+#     shuffled_compositMat = pd.read_csv(com_file, sep=',', usecols=range(1, compositHeader.shape[1])).values
+#     shuffled_namelist = pd.read_csv(com_file, sep=',', usecols=range(1)).values[:, 0]
+#
+#     covIdxArr = np.empty(len(mapObj), dtype=np.int)
+#     for contigIdx in range(len(shuffled_namelist)):
+#         if shuffled_namelist[contigIdx] in mapObj:
+#             covIdxArr[mapObj[shuffled_namelist[contigIdx]]] = contigIdx
+#     compositMat = shuffled_compositMat[covIdxArr]
+#
+#     covMat = covMat + 1e-2
+#     covMat = covMat / covMat.sum(axis=0)[None, :]
+#     if covMat.shape[1] > 1:
+#         covMat = covMat / covMat.sum(axis=1)[:, None]
+#     compositMat = compositMat + 1
+#     compositMat = compositMat / compositMat.sum(axis=1)[:, None]
+#     X_t = np.hstack((covMat, compositMat))  # del * 1e1
+#     return X_t, namelist, mapObj, covMat, compositMat
 
 def gen_seed(contig_file, threads, marker_name="marker", quarter="3quarter"):
     fragScanURL = 'run_FragGeneScan.pl'

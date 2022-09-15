@@ -8,7 +8,7 @@ import os
 import ast
 from collections import defaultdict
 
-import biolib.seq_io as seq_io
+import seq_io
 import biolib.seq_tk as seq_tk
 
 from checkm.defaultValues import DefaultValues

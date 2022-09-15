@@ -82,10 +82,14 @@ def gen_X(com_file, cov_file):
             covIdxArr[mapObj[shuffled_namelist[contigIdx]]] = contigIdx
     compositMat = shuffled_compositMat[covIdxArr]
 
-    covMat = covMat + 1e-2
-    covMat = covMat / covMat.sum(axis=0)[None, :]
     if covMat.shape[1] > 1:
+        covMat = covMat + 1e-2
+        covMat = covMat / covMat.sum(axis=0)[None, :]
         covMat = covMat / covMat.sum(axis=1)[:, None]
+    else:
+        covMat = covMat + 1e-2
+        covMat = covMat / covMat.max(axis=0)[None, :]
+
     compositMat = compositMat + 1
     compositMat = compositMat / compositMat.sum(axis=1)[:, None]
     X_t = np.hstack((covMat, compositMat))  # del * 1e1

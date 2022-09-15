@@ -385,6 +385,7 @@ bin_dirs = get_bin_dirs(bin_dirs_file)
 
 bins, contigs, contigs_in_bins = read_bins(bin_dirs)
 
+
 methods_sorted = sorted(bins.keys())
 contig_lens = {cid: len(contigs[cid]) for cid in contigs}
 orig_bins = copy.deepcopy(bins)

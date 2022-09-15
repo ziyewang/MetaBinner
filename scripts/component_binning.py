@@ -24,7 +24,7 @@ from sklearn.cluster._kmeans import euclidean_distances, stable_cumsum, KMeans, 
 
 from scipy.sparse import csc_matrix
 
-logger = logging.getLogger('Metabinner v1.4')
+logger = logging.getLogger('Metabinner v1.4.4')
 
 logger.setLevel(logging.INFO)
 

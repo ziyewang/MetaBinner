@@ -330,6 +330,43 @@ cp -r addrefined3comps_bins_dir.tsv addrefined2and3comps_bins_dir.tsv
 
 fi
 
+##### if binsB is not empty, binsA and binC is empty
+if [ "`ls -A ${binsA}`" = "" ] &&  [ ! "`ls -A ${binsB}`" = "" ] && [ "`ls -A ${binsC}`" = "" ];then
+
+cp -r bins_dir.tsv addrefined3comps_bins_dir.tsv
+cp -r addrefined3comps_bins_dir.tsv addrefined2and3comps_bins_dir.tsv
+
+fi
+
+##### if binsC is not empty, binsA and binB is empty
+if [ "`ls -A ${binsA}`" = "" ] &&  [ "`ls -A ${binsB}`" = "" ] && [ ! "`ls -A ${binsC}`" = "" ];then
+
+cp -r bins_dir.tsv addrefined3comps_bins_dir.tsv
+cp -r addrefined3comps_bins_dir.tsv addrefined2and3comps_bins_dir.tsv
+
+fi
+
+
+
+##### if binsB and binsC are not empty; binsA is empty
+if [ "`ls -A ${binsA}`" = "" ] &&  [ ! "`ls -A ${binsB}`" = "" ] && [ ! "`ls -A ${binsC}`" = "" ];then
+
+
+${metabinner_path}/scripts/binning_refiner.py -1 ${binsB} -2 ${binsC} -o Refined_BC > Refined_BC.out
+
+if [[ $? -ne 0 ]] ; then echo "Something went wrong with running binning_refiner.py. Exiting.";exit 1; fi
+
+
+mv Refined_BC/Refined Refined_BC/Refined_BC
+
+
+cp -r bins_dir.tsv addrefined3comps_bins_dir.tsv
+
+cp -r addrefined3comps_bins_dir.tsv addrefined2and3comps_bins_dir.tsv
+echo -e "Refined_BC\t${path}/${Method_name}/ensemble_3logtrans/Refined_BC/Refined_BC" >> addrefined2and3comps_bins_dir.tsv
+
+fi
+
 mkdir addrefined2and3comps
 
 ${metabinner_path}/scripts/ensemble.py ${bac_mg_table} \

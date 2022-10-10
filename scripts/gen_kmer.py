@@ -60,7 +60,7 @@ if __name__=="__main__":
     fasta_file = sys.argv[1]
     length_threshold = int(sys.argv[2])
     kmer_len = int(sys.argv[3])
-    outfile = os.path.join(os.path.dirname(fasta_file), os.path.splitext(fasta_file)[0] +'_kmer_'
+    outfile = os.path.join(os.path.splitext(fasta_file)[0] +'_kmer_'
                            + str(kmer_len) + '_f' + str(length_threshold) + '.csv')
     generate_features_from_fasta(fasta_file,length_threshold,kmer_len,outfile)
 

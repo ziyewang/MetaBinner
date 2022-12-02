@@ -142,7 +142,7 @@ def gen_seed(contig_file, threads, marker_name="marker", quarter="3quarter"):
     return candK
 
 # estimate bin_number from candk
-def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
+def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None,threads=-1):
     if dataset_scale == "small":
         candK = max(candK, 2)
         maxK = 4 * candK
@@ -156,7 +156,7 @@ def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
     t = time.time()
     for k in range(candK, maxK, stepK):
         if k < len(X_mat):
-            kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
+            kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=threads)
             kmeans.fit(np.log(X_mat), sample_weight=len_weight)
             silVal = silhouette(np.log(X_mat), kmeans.cluster_centers_, kmeans.labels_, len_weight)
             logger.info("k:" + str(k) + "\tsilhouette:" + str(silVal) + "\telapsed time:" + str(time.time() - t))
@@ -174,7 +174,7 @@ def estimate_bin_number(X_mat, candK, dataset_scale="large", len_weight=None):
     bestSilVal_2nd = 0
     for k in range(candK, maxK, stepK):
         if k < len(X_mat):
-            kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=-1)
+            kmeans = KMeans(n_clusters=k, init='k-means++', random_state=7, n_init=30, n_jobs=threads)
             kmeans.fit(np.log(X_mat), sample_weight=len_weight)
             silVal_2nd = silhouette(np.log(X_mat), kmeans.cluster_centers_, kmeans.labels_, len_weight)
             logger.info("k:" + str(k) + "\tsilhouette:" + str(silVal_2nd) + "\telapsed time:" + str(time.time() - t))
@@ -445,7 +445,7 @@ def read_bins_from_one_dir(bin_dir):
     return bins, contigs
 
 
-def split_hhbins(hhbin_contig_file, mapObj, X_t, length_weight, namelist, out_path, bin_id):
+def split_hhbins(hhbin_contig_file, mapObj, X_t, length_weight, namelist, out_path, bin_id,threads=-1):
     hh_contigs_id = []
     for seq_record in SeqIO.parse(hhbin_contig_file, "fasta"):
         hh_contigs_id.append(seq_record.id)
@@ -456,7 +456,7 @@ def split_hhbins(hhbin_contig_file, mapObj, X_t, length_weight, namelist, out_pa
         hh_weight.append(length_weight[hh_contigs_id_number[i]])
 
     seed_hh_num = gen_seed(hhbin_contig_file, threads, marker_name="bacar_marker")
-    bin_number = estimate_bin_number(X_t_hh_unclustered, seed_hh_num, dataset_scale="small", len_weight=hh_weight)
+    bin_number = estimate_bin_number(X_t_hh_unclustered, seed_hh_num, dataset_scale="small", len_weight=hh_weight,threads=threads)
 
     # seedurl may not exits??
     seedURL = hhbin_contig_file + ".bacar_marker.3_quarter.seed"
@@ -545,7 +545,7 @@ if __name__ == '__main__':
 
         domain, comp, cont = markers.bin_quality(bins[bin_id])
         if comp >= float(args.mincomp) and cont >= float(args.mincont) and len(bins[bin_id]) >= 3:
-            split_hhbins(bf_path, mapObj, X_t, length_weight, namelist, out_path, bin_id)
+            split_hhbins(bf_path, mapObj, X_t, length_weight, namelist, out_path, bin_id, threads=threads)
         else:
             temp_bin_file = os.path.join(out_path + bin_id + '.fa')
             fout_bin = open(temp_bin_file, 'w')

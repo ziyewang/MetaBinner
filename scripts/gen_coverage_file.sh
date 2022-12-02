@@ -81,8 +81,8 @@ while true; do
         esac
 done
 
-#echo ${F_reads_suffix}
-#echo ${R_reads_suffix}
+echo ${threads}
+echo ${len}
 #exit 1
 ########################################################################################################
 ########################           MAKING SURE EVERYTHING IS SET UP             ########################
@@ -252,7 +252,7 @@ comm "making contig depth file..."
 
 cat ${out}/work_files/mb2_master_depth.txt | cut -f -1,4- > ${out}/coverage_profile.tsv
 #cat ${out}/work_files/mb2_master_depth.txt | awk '{if ($2>1000) print $0 }' | cut -f -1,4- > ${out}/coverage_profile_f1k.tsv
-cat ${out}/work_files/mb2_master_depth.txt | awk '{if ($2>${len}) print $0 }' | cut -f -1,4- > ${out}/coverage_profile_f${len}.tsv
+cat ${out}/work_files/mb2_master_depth.txt | awk '{if ($2>'"$len"') print $0 }' | cut -f -1,4- > ${out}/coverage_profile_f${len}.tsv
 ########################################################################################################
 ########################      BINNING PIPELINE SUCCESSFULLY FINISHED!!!         ########################
 ########################################################################################################

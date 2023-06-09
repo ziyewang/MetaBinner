@@ -132,6 +132,7 @@ Options:
                         with lower memory requirements.
 
 #The file "metabinner_result.tsv" in the "${output_dir}/metabinner_res" is the final output.
+Note: all paths in the run_metabinner.sh options should be absolute
 ```
 
 ## <a name="contact"></a>Contacts and bug reports

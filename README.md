@@ -1,7 +1,7 @@
 # MetaBinner
-GitHub repository for the manuscript "MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities". We are glad that overall Metabinner achieve top performance on the CAMI II Challenge. Please refer to Meyer, F., et al[1] for the results of CAMI II Challenge.
+GitHub repository for the manuscript "MetaBinner: a high-performance and stand-alone ensemble binning method to recover individual genomes from complex microbial communities". We are glad that Metabinner achieves top performance on the CAMI II Challenge overall. Please refer to Meyer, F. et al. [1] for the results of the CAMI II Challenge.
 
-MetaBinner consists of two modules: 1) “Component module” includes steps 1-4, developed for generating high-quality, diverse component binning results; and 2) “Ensemble module” includes step 5, developed for recovering individual genomes from the component binning results. MetaBinner is an ensemble binning method, but it does not need the outputs of other individual binners. Instead, MetaBinner generates multiple high-quality component binning results based on the proposed “partial seed” method, for further integration. Please see our manuscript for the details.
+MetaBinner consists of two modules: 1) “Component module” includes steps 1-4, developed for generating high-quality, diverse component binning results; and 2) “Ensemble module” includes step 5, developed for recovering individual genomes from the component binning results. MetaBinner is an ensemble binning method, but it does not need the outputs of other individual binners. Instead, MetaBinner generates multiple high-quality component binning results based on the proposed “partial seed” method for further integration. Please see our manuscript for details.
 
 <p align="center">
 <img src="https://github.com/ziyewang/MetaBinner/blob/master/figures/framework.png" width="550"/>
@@ -22,12 +22,12 @@ conda install -c bioconda metabinner
 
 
 Obtain codes and create an environment:
-After installing Anaconda (or miniconda), fisrt obtain MetaBinner:
+After installing Anaconda (or miniconda), first obtain MetaBinner:
 
 ```sh
 git clone https://github.com/ziyewang/MetaBinner.git
 ```
-Then simply create a environment to run MetaBinner.
+Then simply create an environment to run MetaBinner.
 
 ```sh
 cd MetaBinner

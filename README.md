@@ -37,9 +37,9 @@ conda activate metabinner_env
 
 ## <a name="preprocessing"></a>Preprocessing
 
-The preprocessing steps aim to generate coverage profile and composition profile as input to our program.
+The preprocessing steps aim to generate coverage and composition profiles as input to our program.
 
-There are several binning methods that can generate these two types of information (such as CONCOCT and MetaWRAP) and we provide one method to generate the input files as follows.
+Several binning methods can generate these two types of information (such as CONCOCT and MetaWRAP), and we provide one way to generate the input files as follows.
 ### Coverage Profile
 The coverage profiles of the contigs for the results in the manuscript were obtained via MetaWRAP 1.2.1 script: ``binning.sh".
 
@@ -53,7 +53,7 @@ cat mb2_master_depth.txt | awk '{if ($2>1000) print $0 }' | cut -f -1,4- > cover
 
 ```
 
-To generate coverage from sequencing reads directly, run the following script slightly modified from the "binning.sh" of MetaWRAP. The script support different types of sequencing reads, and the defalut type is "paired" ([readsX_1.fastq readsX_2.fastq ...]). If MetaBinner is installed via bioconda, users can obtain path_to_MetaBinner via running this command: $(dirname $(which run_metabinner.sh))
+To generate coverage from sequencing reads directly, run the following script slightly modified from the "binning.sh" of MetaWRAP. The script supports different types of sequencing reads, and the default type is "paired" ([readsX_1.fastq readsX_2.fastq ...]). If MetaBinner is installed via bioconda, users can obtain path_to_MetaBinner via running this command: $(dirname $(which run_metabinner.sh))
 
 ```sh
 cd path_to_MetaBinner
@@ -72,7 +72,7 @@ Options:
         -m INT          amount of RAM available (default=4)
         -l INT          minimum contig length to bin (default=1000bp).
         --single-end    non-paired reads mode (provide *.fastq files)
-        --interleaved   the input read files contain interleaved paired-end reads
+        --interleaved   input read files contain interleaved paired-end reads
         -f              Forward read suffix for paired reads (default="_1.fastq")
 	-r              Reverse read suffix for paired reads (default="_2.fastq")
 
@@ -80,7 +80,7 @@ Options:
 
 ### Composition Profile
 
-Composition profile is the vector representation of contigs and we use kmer (k=4 in the example) to generate this information. To generate the composition profile and keep the contigs longer than contig_length_threshold, such as 1000, for binning, run the script as follows:
+Composition profile is the vector representation of contigs, and we use kmer (k=4 in the example) to generate this information. To generate the composition profile and keep the contigs longer than contig_length_threshold, such as 1000, for binning, run the script as follows:
 
 ```
 cd path_to_MetaBinner
@@ -88,7 +88,7 @@ cd scripts
 
 python gen_kmer.py test_data/final.contigs_f1k.fa 1000 4 
 ```
-Here we choose k=4. By default we usually keep contigs longer than 1000, you can specify a different number. The kmer_file will be generated in the /path/to/contig_file. 
+Here we choose k=4. By default, we usually keep contigs longer than 1000; users can specify a different number. The kmer_file will be generated in the /path/to/contig_file. 
 
 And the users can run the following command to keep the contigs longer than 1000bp for binning.
 
@@ -106,7 +106,7 @@ Test data is available at https://drive.google.com/file/d/1a-IOOpklXQr_C4sgNxjsx
 
 #path to MetaBinner
 metabinner_path=/home/wzy/MetaBinner
-Note: If users intall MetaBinner via bioconda, they can set metabinner_path as follows: metabinner_path=$(dirname $(which run_metabinner.sh))
+Note: If users install MetaBinner via bioconda, they can set metabinner_path as follows: metabinner_path=$(dirname $(which run_metabinner.sh))
 
 ##test data
 #path to the input files for MetaBinner and the output dir:
@@ -122,10 +122,10 @@ Options:
 
         -a STR          metagenomic assembly file
         -o STR          output directory
-        -d STR          coverage_profile.tsv; The coverage profiles, containing a table where each row correspond
+        -d STR          coverage_profile.tsv; The coverage profiles, containing a table where each row corresponds
                             to a contig, and each column correspond to a sample. All values are separated with tabs.
-        -k STR          kmer_profile.csv; The composition profiles, containing a table where each row correspond to a contig,
-                            and each column correspond to the kmer composition of particular kmer. All values are separated with comma.
+        -k STR          kmer_profile.csv; The composition profiles, containing a table where each row corresponds to a contig,
+                            and each column correspond to the kmer composition of a particular kmer. All values are separated with comma.
         -p STR          path to MetaBinner; e.g. /home/wzy/MetaBinner
         -t INT          number of threads (default=1)
         -s STR          Dataset scale; eg. small,large,huge (default:large); Users can choose "huge" to run MetaBinner on huge datasets

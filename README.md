@@ -35,6 +35,11 @@ conda env create -f metabinner_env.yaml
 conda activate metabinner_env
 ```
 
+## <a name="requirements"></a>System Requirements
+
+### OS Requirements
+MetaBinner is supported and tested in Linux systems.
+
 ## <a name="preprocessing"></a>Preprocessing
 
 The preprocessing steps aim to generate coverage and composition profiles as input to our program.
